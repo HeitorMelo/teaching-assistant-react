@@ -48,13 +48,14 @@ app.put('/api/students/:cpf', (req: Request, res: Response) => {
     const { cpf } = req.params;
     const { name, email } = req.body;
     
-    // Create a partial Student object for update
-    const updates: Partial<Student> = {};
-    if (name !== undefined) updates.name = name;
-    if (email !== undefined) updates.email = email;
+    if (!name || !email) {
+      return res.status(400).json({ error: 'Name and email are required for update' });
+    }
     
-    const student = studentSet.updateStudent(cpf, updates);
-    res.json(student.toJSON());
+    // Create a complete Student object for update
+    const updatedStudent = new Student(name, cpf, email);
+    const result = studentSet.updateStudent(updatedStudent);
+    res.json(result.toJSON());
   } catch (error) {
     res.status(400).json({ error: (error as Error).message });
   }

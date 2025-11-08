@@ -30,23 +30,17 @@ export class StudentSet {
   }
 
   // Update student by CPF
-  updateStudent(cpf: string, updatedStudent: Partial<Student>): Student {
-    const cleanCPF = cpf.replace(/[.-]/g, '');
-    const student = this.findStudentByCPF(cleanCPF);
+  updateStudent(updatedStudent: Student): Student {
+    const cleanCPF = updatedStudent.getCleanCPF();
+    const existingStudentIndex = this.students.findIndex(s => s.getCleanCPF() === cleanCPF);
     
-    if (!student) {
+    if (existingStudentIndex === -1) {
       throw new Error('Student not found');
     }
 
-    // Update fields if provided
-    if (updatedStudent.name !== undefined) student.name = updatedStudent.name;
-    if (updatedStudent.email !== undefined) {
-      // Validate email before updating by creating a temporary Student
-      new Student(student.name, student.cpf, updatedStudent.email);
-      student.email = updatedStudent.email;
-    }
-
-    return student;
+    // Replace the existing student with the updated one
+    this.students[existingStudentIndex] = updatedStudent;
+    return updatedStudent;
   }
 
   // Find student by CPF
