@@ -30,25 +30,13 @@ const App: React.FC = () => {
     }
   };
 
-  const handleAddStudent = async (studentData: { name: string; cpf: string; email: string }) => {
-    try {
-      setError('');
-      await studentService.createStudent(studentData);
-      await loadStudents(); // Reload the list
-    } catch (err) {
-      setError((err as Error).message);
-    }
+  const handleStudentAdded = () => {
+    loadStudents(); // Reload the list when a new student is added
   };
 
-  const handleUpdateStudent = async (cpf: string, updates: { name?: string; email?: string }) => {
-    try {
-      setError('');
-      await studentService.updateStudent(cpf, updates);
-      setEditingStudent(null);
-      await loadStudents(); // Reload the list
-    } catch (err) {
-      setError((err as Error).message);
-    }
+  const handleStudentUpdated = () => {
+    setEditingStudent(null);
+    loadStudents(); // Reload the list when a student is updated
   };
 
   const handleDeleteStudent = async (cpf: string) => {
@@ -69,17 +57,8 @@ const App: React.FC = () => {
     setEditingStudent(null);
   };
 
-  const handleFormSubmit = async (studentData: { name: string; cpf: string; email: string }) => {
-    if (editingStudent) {
-      // Update existing student
-      await handleUpdateStudent(editingStudent.cpf, {
-        name: studentData.name,
-        email: studentData.email
-      });
-    } else {
-      // Add new student
-      await handleAddStudent(studentData);
-    }
+  const handleError = (errorMessage: string) => {
+    setError(errorMessage);
   };
 
   return (
@@ -97,7 +76,9 @@ const App: React.FC = () => {
         )}
 
         <StudentForm
-          onSubmit={handleFormSubmit}
+          onStudentAdded={handleStudentAdded}
+          onStudentUpdated={handleStudentUpdated}
+          onError={handleError}
           onCancel={editingStudent ? handleCancelEdit : undefined}
           editingStudent={editingStudent}
         />

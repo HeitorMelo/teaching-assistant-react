@@ -1,13 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { Student } from '../types/Student';
+import { studentService } from '../services/StudentService';
 
 interface StudentFormProps {
-  onSubmit: (student: { name: string; cpf: string; email: string }) => Promise<void>;
+  onStudentAdded: () => void;      // Callback when student is successfully added
+  onStudentUpdated: () => void;    // Callback when student is successfully updated
   onCancel?: () => void;
   editingStudent?: Student | null;
+  onError: (error: string) => void; // Callback for error handling
 }
 
-const StudentForm: React.FC<StudentFormProps> = ({ onSubmit, onCancel, editingStudent }) => {
+const StudentForm: React.FC<StudentFormProps> = ({ 
+  onStudentAdded, 
+  onStudentUpdated, 
+  onCancel, 
+  editingStudent,
+  onError 
+}) => {
   const [formData, setFormData] = useState({
     name: '',
     cpf: '',
@@ -39,12 +48,21 @@ const StudentForm: React.FC<StudentFormProps> = ({ onSubmit, onCancel, editingSt
     setIsSubmitting(true);
     
     try {
-      await onSubmit(formData);
-      // Clear form after successful submission of new student
-      if (!editingStudent) {
-        setFormData({ name: '', cpf: '', email: '' });
+      if (editingStudent) {
+        // Update existing student
+        await studentService.updateStudent(editingStudent.cpf, {
+          name: formData.name,
+          email: formData.email
+        });
+        onStudentUpdated();
+      } else {
+        // Add new student
+        await studentService.createStudent(formData);
+        setFormData({ name: '', cpf: '', email: '' }); // Clear form
+        onStudentAdded();
       }
-      // For editing, form will be reset by useEffect when editingStudent changes to null
+    } catch (error) {
+      onError((error as Error).message);
     } finally {
       setIsSubmitting(false);
     }
