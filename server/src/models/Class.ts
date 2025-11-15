@@ -1,5 +1,4 @@
-import { Student } from './Student';
-import { Enrollment } from './Enrollment';
+import { Student } from './Student'; import { Enrollment } from './Enrollment';
 import { Statistics } from './Statistics';
 
 export class Class {

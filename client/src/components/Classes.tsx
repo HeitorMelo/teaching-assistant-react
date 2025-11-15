@@ -34,6 +34,10 @@ const Classes: React.FC<ClassesProps> = ({
   const [enrollmentPanelClass, setEnrollmentPanelClass] = useState<Class | null>(null);
   const [selectedStudentsForEnrollment, setSelectedStudentsForEnrollment] = useState<Set<string>>(new Set());
   const [isEnrolling, setIsEnrolling] = useState(false);
+  // Class comparison selection state
+  const [isCompareModalOpen, setIsCompareModalOpen] = useState(false);
+  const [selectedForComparison, setSelectedForComparison] = useState<Set<string>>(new Set());
+  const [comparisonClasses, setComparisonClasses] = useState<Class[]>([]);
 
   // Load all students for enrollment dropdown
   const loadAllStudents = useCallback(async () => {
@@ -199,6 +203,35 @@ const Classes: React.FC<ClassesProps> = ({
     }
   };
 
+  // Comparison selection handlers
+  const handleOpenCompareModal = () => {
+    setSelectedForComparison(new Set());
+    setIsCompareModalOpen(true);
+  };
+
+  const handleCloseCompareModal = () => {
+    setIsCompareModalOpen(false);
+    setSelectedForComparison(new Set());
+  };
+
+  const handleToggleCompareSelection = (classId: string) => {
+    const next = new Set(selectedForComparison);
+    if (next.has(classId)) next.delete(classId);
+    else next.add(classId);
+    setSelectedForComparison(next);
+  };
+
+  const handleConfirmComparison = () => {
+    const chosen = classes.filter(c => selectedForComparison.has(c.id));
+    setComparisonClasses(chosen);
+    setIsCompareModalOpen(false);
+  };
+
+  const handleClearComparison = () => {
+    setComparisonClasses([]);
+    setSelectedForComparison(new Set());
+  };
+
   // Generate current year options
   const currentYear = new Date().getFullYear();
   const yearOptions = Array.from({ length: 10 }, (_, i) => currentYear - 5 + i);
@@ -328,8 +361,35 @@ const Classes: React.FC<ClassesProps> = ({
         )}
       </div>
 
-      {/* Class Comparison */}
-      {classes.length > 0 && <ClassComparison classes={classes} />}
+      {/* Class Comparison Controls */}
+      <div className="comparison-controls">
+        <button
+          type="button"
+          className="select-compare-btn"
+          onClick={handleOpenCompareModal}
+          disabled={classes.length === 0}
+        >
+          Select classes to compare
+        </button>
+
+        {comparisonClasses.length > 0 && (
+          <>
+            <button
+              type="button"
+              className="clear-compare-btn"
+              onClick={handleClearComparison}
+            >
+              Clear comparison
+            </button>
+            <span className="compare-count">{comparisonClasses.length} selected</span>
+          </>
+        )}
+      </div>
+
+      {/* Show comparison only for confirmed selected classes */}
+      {comparisonClasses.length > 0 && (
+        <ClassComparison classes={comparisonClasses} />
+      )}
 
       {/* Modern Enrollment Panel */}
       {enrollmentPanelClass && (
@@ -430,6 +490,54 @@ const Classes: React.FC<ClassesProps> = ({
                     ? 'Enrolling...' 
                     : `Enroll ${selectedStudentsForEnrollment.size} Student${selectedStudentsForEnrollment.size !== 1 ? 's' : ''}`
                   }
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Comparison Selection Modal */}
+      {isCompareModalOpen && (
+        <div className="comparison-overlay">
+          <div className="comparison-modal">
+            <div className="comparison-modal-header">
+              <h3>Select Classes for Comparison</h3>
+              <button
+                className="close-modal-btn"
+                onClick={handleCloseCompareModal}
+                title="Close"
+              >
+                ×
+              </button>
+            </div>
+
+            <div className="comparison-modal-content">
+              {classes.length === 0 ? (
+                <p>No classes available to compare.</p>
+              ) : (
+                <div className="comparison-list">
+                  {classes.map(c => (
+                    <label key={c.id} className={`comparison-item ${selectedForComparison.has(c.id) ? 'selected' : ''}`}>
+                      <input
+                        type="checkbox"
+                        checked={selectedForComparison.has(c.id)}
+                        onChange={() => handleToggleCompareSelection(c.id)}
+                      />
+                      <span className="comparison-item-label">{c.topic} ({c.year}/{c.semester})</span>
+                    </label>
+                  ))}
+                </div>
+              )}
+
+              <div className="comparison-actions">
+                <button className="cancel-btn" onClick={handleCloseCompareModal}>Cancel</button>
+                <button
+                  className="confirm-compare-btn"
+                  onClick={handleConfirmComparison}
+                  disabled={selectedForComparison.size === 0}
+                >
+                  Confirm ({selectedForComparison.size})
                 </button>
               </div>
             </div>

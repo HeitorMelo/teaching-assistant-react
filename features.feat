@@ -1,0 +1,10 @@
+Scenario: Successfully comparing two classes
+  Given I am on the "Class" page
+  And I select the class "ESS1" for comparison
+  And I select the class "ESS2" for comparison
+  When I confirm my selection
+  Then I should see the class statistics for "ESS1"
+  And I should see the class statistics for "ESS2"
+  And I should remain on the "Class" page
+
+
