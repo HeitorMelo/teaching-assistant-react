@@ -2,6 +2,8 @@ import { Class } from '../types/Class';
 
 const API_BASE_URL = 'http://localhost:3005';
 
+type ClassRequestData = Omit<Class, 'id' | 'enrollments' | 'statistics'>;
+
 class ClassService {
   static async getAllClasses(): Promise<Class[]> {
     try {
@@ -19,7 +21,7 @@ class ClassService {
     }
   }
 
-  static async addClass(classData: Omit<Class, 'id' | 'enrollments'>): Promise<Class> {
+  static async addClass(classData: ClassRequestData): Promise<Class> {
     try {
       const response = await fetch(`${API_BASE_URL}/api/classes`, {
         method: 'POST',
@@ -41,7 +43,7 @@ class ClassService {
     }
   }
 
-  static async updateClass(classId: string, classData: Omit<Class, 'id' | 'enrollments'>): Promise<Class> {
+  static async updateClass(classId: string, classData: ClassRequestData): Promise<Class> {
     try {
       const response = await fetch(`${API_BASE_URL}/api/classes/${classId}`, {
         method: 'PUT',

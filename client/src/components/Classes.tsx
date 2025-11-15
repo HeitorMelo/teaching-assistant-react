@@ -4,6 +4,7 @@ import { Student } from '../types/Student';
 import ClassService from '../services/ClassService';
 import { studentService } from '../services/StudentService';
 import EnrollmentService from '../services/EnrollmentService';
+import ClassComparison from './ClassComparison';
 
 interface ClassesProps {
   classes: Class[];
@@ -326,6 +327,9 @@ const Classes: React.FC<ClassesProps> = ({
           </div>
         )}
       </div>
+
+      {/* Class Comparison */}
+      {classes.length > 0 && <ClassComparison classes={classes} />}
 
       {/* Modern Enrollment Panel */}
       {enrollmentPanelClass && (

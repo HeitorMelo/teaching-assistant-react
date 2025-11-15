@@ -1193,3 +1193,142 @@ tbody tr:last-child td {
   background-color: #fecaca;
   color: #991b1b;
 }
+
+/* Class Comparison Styles */
+.class-comparison-container {
+  margin-top: 2rem;
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e2e8f0;
+}
+
+.class-comparison-container h3 {
+  color: #2d3748;
+  margin-bottom: 1.5rem;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 2rem;
+}
+
+.comparison-table thead {
+  background-color: #f8fafc;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.comparison-table th {
+  padding: 0.75rem;
+  text-align: left;
+  font-weight: 600;
+  color: #2d3748;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.comparison-table td {
+  padding: 0.75rem;
+  border-bottom: 1px solid #e2e8f0;
+  color: #374151;
+  font-size: 0.95rem;
+}
+
+.comparison-table tbody tr {
+  transition: background-color 0.2s;
+}
+
+.comparison-table tbody tr:hover {
+  background-color: #f9fafb;
+}
+
+.comparison-table tbody tr.aggregate-row {
+  background-color: #f0f4ff;
+  font-weight: 600;
+  border-top: 2px solid #e2e8f0;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.stat-cell {
+  text-align: center;
+  font-weight: 500;
+}
+
+.stat-cell.approved {
+  color: #10b981;
+  font-weight: 600;
+}
+
+.stat-cell.failed {
+  color: #ef4444;
+  font-weight: 600;
+}
+
+.stat-cell.approval-rate {
+  font-weight: 600;
+}
+
+.stat-cell.approval-rate .good {
+  color: #10b981;
+  font-weight: 700;
+}
+
+.stat-cell.approval-rate .fair {
+  color: #f59e0b;
+  font-weight: 700;
+}
+
+.stat-cell.approval-rate .poor {
+  color: #ef4444;
+  font-weight: 700;
+}
+
+/* Statistics Summary Cards */
+.statistics-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.summary-card {
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  padding: 1rem;
+  border-radius: 8px;
+  text-align: center;
+  border: 1px solid #e2e8f0;
+  transition: all 0.2s;
+}
+
+.summary-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.summary-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #4a5568;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.summary-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #2d3748;
+}
+
+.summary-value.approved {
+  color: #10b981;
+}
+
+.summary-value.failed {
+  color: #ef4444;
+}

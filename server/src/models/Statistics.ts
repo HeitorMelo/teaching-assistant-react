@@ -1,11 +1,10 @@
-// server/src/models/Statistics.ts
 export class Statistics {
-  public meanGrade: number;                    // average score
-  public enrolled: number;                     // total number of enrolled students
-  public approved: number;                     // number of students who passed
-  public failedByGrade: number;                // number of students who failed by grade
-  public failedByAbsence: number;              // number of students who failed by absence
-  private lastUpdated?: string;                 // ISO date string
+  public meanGrade: number;
+  public enrolled: number;
+  public approved: number;
+  public failedByGrade: number;
+  public failedByAbsence: number;
+  private lastUpdated?: string;
 
   constructor(
     meanGrade: number = 0,
