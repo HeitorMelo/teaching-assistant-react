@@ -1,5 +1,7 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
+import multer from 'multer';
+import * as XLSX from 'xlsx';
 import { StudentSet } from './models/StudentSet';
 import { Student } from './models/Student';
 import { Evaluation } from './models/Evaluation';
@@ -14,6 +16,14 @@ const PORT = 3005;
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+// Configure multer for file uploads (in-memory storage)
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: {
+    fileSize: 5 * 1024 * 1024 // 5MB limit
+  }
+});
 
 // In-memory storage with file persistence
 const studentSet = new StudentSet();
@@ -377,6 +387,113 @@ app.delete('/api/classes/:classId/enroll/:studentCPF', (req: Request, res: Respo
   } catch (error) {
     res.status(400).json({ error: (error as Error).message });
   }
+});
+
+// POST /api/classes/:classId/enroll-bulk - Bulk enroll students from spreadsheet
+app.post('/api/classes/:classId/enroll-bulk', (req: Request, res: Response) => {
+  upload.single('file')(req, res, (err: any) => {
+    try {
+      // Handle multer errors
+      if (err) {
+        console.error('Multer error:', err);
+        return res.status(400).json({ 
+          error: 'Erro ao processar o arquivo enviado.' 
+        });
+      }
+
+      const { classId } = req.params;
+      
+      // Validation: Check if file was uploaded
+      if (!req.file) {
+        return res.status(400).json({ 
+          error: 'Nenhum arquivo foi enviado. Por favor, envie um arquivo .xlsx ou .csv.' 
+        });
+      }
+
+      // Find the class
+      const classObj = classes.findClassById(classId);
+      if (!classObj) {
+        return res.status(404).json({ error: 'Turma não encontrada' });
+      }
+
+      // Read the spreadsheet from buffer
+      const workbook = XLSX.read(req.file.buffer, { type: 'buffer' });
+      
+      // Get the first sheet
+      const firstSheetName = workbook.SheetNames[0];
+      if (!firstSheetName) {
+        return res.status(400).json({ 
+          error: 'O arquivo enviado está vazio ou não é suportado (apenas .xlsx ou .csv permitido). Por favor, envie um arquivo com matrículas válidas.' 
+        });
+      }
+      
+      const worksheet = workbook.Sheets[firstSheetName];
+      
+      // Convert to JSON
+      const data: any[] = XLSX.utils.sheet_to_json(worksheet);
+      
+      // Validation: Check if spreadsheet has data
+      if (!data || data.length === 0) {
+        return res.status(400).json({ 
+          error: 'O arquivo enviado está vazio ou não é suportado (apenas .xlsx ou .csv permitido). Por favor, envie um arquivo com matrículas válidas.' 
+        });
+      }
+
+      // Initialize counters
+      let importedCount = 0;
+      let rejectedCount = 0;
+
+      // Process each row
+      for (const row of data) {
+        // Get CPF from the row (try different possible column names)
+        const cpfValue = row.cpf || row.CPF || row.matricula || row.Matricula || row.Matrícula;
+        
+        if (!cpfValue) {
+          continue; // Skip rows without CPF
+        }
+
+        // Clean and convert CPF to string
+        const cpfString = String(cpfValue).trim();
+        const cleanedCPF = cleanCPF(cpfString);
+
+        // Check if student exists
+        const student = studentSet.findStudentByCPF(cleanedCPF);
+        if (!student) {
+          continue; // Skip if student not found
+        }
+
+        // Check if student is already enrolled
+        const existingEnrollment = classObj.findEnrollmentByStudentCPF(cleanedCPF);
+        if (existingEnrollment) {
+          continue; // Skip if already enrolled (Scenario 2)
+        }
+
+        // Enroll the student (Scenario 1)
+        try {
+          classObj.addEnrollment(student);
+          importedCount++;
+        } catch (error) {
+          // Error adding enrollment, skip this student
+          console.error(`Error enrolling student ${cleanedCPF}:`, error);
+        }
+      }
+
+      // Save changes to file
+      triggerSave();
+
+      // Return response with counters
+      res.status(200).json({
+        importedCount,
+        rejectedCount
+      });
+
+    } catch (error) {
+      console.error('Error processing bulk enrollment:', error);
+      res.status(500).json({ 
+        error: 'Erro ao processar o arquivo. Por favor, verifique o formato e tente novamente.' 
+      });
+    }
+  });
 });
 
 // GET /api/classes/:classId/enrollments - Get all enrollments for a class
