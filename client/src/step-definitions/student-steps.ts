@@ -176,19 +176,3 @@ Then('the student should have email {string}', async function (expectedEmail: st
   
   throw new Error(`Student with email ${expectedEmail} not found in the student list`);
 });
-
-Then('I clean up by removing the test student', async function () {
-  if (testStudentCPF) {
-    try {
-      const response = await fetch(`${serverUrl}/api/students/${testStudentCPF}`, {
-        method: 'DELETE'
-      });
-      
-      if (response.ok) {
-        console.log(`Successfully cleaned up test student with CPF: ${testStudentCPF}`);
-      }
-    } catch (error) {
-      console.log(`Warning: Could not clean up test student: ${error}`);
-    }
-  }
-});
