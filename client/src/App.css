@@ -754,21 +754,13 @@ tbody tr:last-child td {
 
 /* Update enroll button in table */
 .enroll-btn {
-  background-color: #3b82f6;
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
   color: white;
-  border: none;
-  padding: 0.5rem 0.75rem;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.875rem;
-  font-weight: 500;
-  margin-left: 0.5rem;
-  transition: background-color 0.2s;
-  min-width: auto;
 }
 
 .enroll-btn:hover {
-  background-color: #2563eb;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
 }
 
 /* Evaluations Table */
@@ -1192,4 +1184,253 @@ tbody tr:last-child td {
 .evaluation-select option[value="MANA"] {
   background-color: #fecaca;
   color: #991b1b;
+}
+
+/* Actions Grid - 2x2 Button Layout */
+.actions-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.actions-grid button {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  min-width: 0;
+  width: 100%;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* Report Button */
+.report-btn {
+  background: linear-gradient(135deg, #f6ab3b 0%, #ffa620 100%);
+  color: white;
+}
+
+.report-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+}
+
+/* Report Modal */
+.report-modal {
+  background-color: white;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 1000px;
+  max-height: 90vh;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+}
+
+.report-modal-content {
+  padding: 1.5rem;
+  overflow-y: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.loading-report {
+  text-align: center;
+  padding: 3rem;
+  color: #6b7280;
+}
+
+.no-report-data {
+  text-align: center;
+  padding: 3rem;
+  color: #6b7280;
+}
+
+/* Report Statistics Grid - Two Columns */
+.report-stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.report-stat-card {
+  background-color: #f8fafc;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.report-stat-card h4 {
+  margin: 0 0 1rem 0;
+  color: #374151;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-bottom: 2px solid #667eea;
+  padding-bottom: 0.5rem;
+}
+
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.stat-item:last-child {
+  border-bottom: none;
+}
+
+.stat-label {
+  font-weight: 500;
+  color: #6b7280;
+  font-size: 0.95rem;
+}
+
+.stat-value {
+  font-weight: 700;
+  color: #111827;
+  font-size: 1.5rem;
+}
+
+.stat-value.approved {
+  color: #10b981;
+}
+
+.stat-value.not-approved {
+  color: #ef4444;
+}
+
+/* Evaluation Performance Section */
+.evaluation-performance {
+  background-color: #f8fafc;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.evaluation-performance h4 {
+  margin: 0 0 1rem 0;
+  color: #374151;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-bottom: 2px solid #667eea;
+  padding-bottom: 0.5rem;
+}
+
+.no-evaluations {
+  text-align: center;
+  padding: 2rem;
+  color: #6b7280;
+  font-style: italic;
+}
+
+.performance-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.5rem;
+  background-color: white;
+}
+
+.performance-table th,
+.performance-table td {
+  border: 1px solid #e5e7eb;
+  padding: 0.75rem;
+  text-align: center;
+}
+
+.performance-table th {
+  background-color: #667eea;
+  color: white;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.performance-table th:first-child {
+  text-align: left;
+}
+
+.performance-table td:first-child {
+  text-align: left;
+  font-weight: 600;
+  color: #374151;
+}
+
+.performance-table tbody tr:hover {
+  background-color: #f9fafb;
+}
+
+.performance-table .grade-ma {
+  background-color: #d1fae5;
+  color: #065f46;
+  font-weight: 600;
+}
+
+.performance-table .grade-mpa {
+  background-color: #fef3c7;
+  color: #92400e;
+  font-weight: 600;
+}
+
+.performance-table .grade-mana {
+  background-color: #fecaca;
+  color: #991b1b;
+  font-weight: 600;
+}
+
+/* Report Footer */
+.report-footer {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.report-timestamp {
+  text-align: center;
+  color: #6b7280;
+  font-size: 0.875rem;
+  font-style: italic;
+  margin: 0;
+}
+
+/* Report Actions */
+.report-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding: 1.5rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+/* Responsive Design for Report */
+@media (max-width: 768px) {
+  .report-stats-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .actions-grid {
+    grid-template-columns: 1fr;
+    max-width: none;
+  }
+  
+  .performance-table {
+    font-size: 0.8rem;
+  }
+  
+  .performance-table th,
+  .performance-table td {
+    padding: 0.5rem 0.25rem;
+  }
+  
+  .stat-value {
+    font-size: 1.25rem;
+  }
 }
