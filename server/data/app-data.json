@@ -102,7 +102,14 @@
             }
           ]
         }
-      ]
+      ],
+      "statistics": {
+        "meanGrade": 3.67,
+        "enrolled": 3,
+        "approved": 2,
+        "failedByGrade": 1,
+        "failedByAbsence": 0
+      }
     },
     {
       "topic": "Engenharia de Software e Sistemas",
@@ -167,7 +174,14 @@
             }
           ]
         }
-      ]
+      ],
+      "statistics": {
+        "meanGrade": 3.5,
+        "enrolled": 2,
+        "approved": 1,
+        "failedByGrade": 1,
+        "failedByAbsence": 0
+      }
     }
   ]
 }

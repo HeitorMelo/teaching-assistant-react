@@ -1,0 +1,27 @@
+Scenario: Successfully comparing two classes
+  Given I am on the "Class" page
+  And I select the class "ESS1" for comparison
+  And I select the class "ESS2" for comparison
+  When I confirm my selection
+  Then I should see the class statistics for "ESS1"
+  And I should see the class statistics for "ESS2"
+  And I should remain on the "Class" page
+
+Scenario: Attempting to compare classes with insufficient selections
+  Given I am on the "Class" page
+  And I select the class "ESS1" for comparison
+  And I do not select any other class
+  When I try to confirm my selection
+  Then I should be informed that at least two classes are required for comparison
+  And the comparison view should not be opened
+  And I should remain on the "Class" page
+
+Scenario: Attempting to compare classes when one selected class has no data
+  Given I am on the "Class" page
+  And I select the class "ESS1" for comparison
+  And I select the class "ESS2" for comparison
+  And the class "ESS2" has no registered statistics
+  When I try to confirm my selection
+  Then I should be informed that one or more selected classes do not have available statistics
+  And the comparison view should not be opened
+  And I should remain on the "Class" pageto 

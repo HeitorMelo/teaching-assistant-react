@@ -1,17 +1,19 @@
-import { Student } from './Student';
-import { Enrollment } from './Enrollment';
+import { Student } from './Student'; import { Enrollment } from './Enrollment';
+import { Statistics } from './Statistics';
 
 export class Class {
   private topic: string;
   private semester: number;
   private year: number;
   private enrollments: Enrollment[];
+  private statistics: Statistics;
 
-  constructor(topic: string, semester: number, year: number, enrollments: Enrollment[] = []) {
+  constructor(topic: string, semester: number, year: number, enrollments: Enrollment[] = [], statistics: Statistics = new Statistics()) {
     this.topic = topic;
     this.semester = semester;
     this.year = year;
     this.enrollments = enrollments;
+    this.statistics = statistics;
   }
 
   // Getters
@@ -36,6 +38,10 @@ export class Class {
     return `${this.topic}-${this.year}-${this.semester}`;
   }
 
+  getStatistics(): Statistics {
+    return this.statistics;
+  }
+
   // Setters for editing
   setTopic(topic: string): void {
     this.topic = topic;
@@ -47,6 +53,10 @@ export class Class {
 
   setYear(year: number): void {
     this.year = year;
+  }
+
+  setStatistics(statistics: Statistics): void {
+    this.statistics = statistics;
   }
 
   // Enrollment management
@@ -93,12 +103,13 @@ export class Class {
       topic: this.topic,
       semester: this.semester,
       year: this.year,
-      enrollments: this.enrollments.map(enrollment => enrollment.toJSON())
+      enrollments: this.enrollments.map(enrollment => enrollment.toJSON()),
+      statistics: this.statistics,
     };
   }
 
   // Create Class from JSON object
-  static fromJSON(data: { topic: string; semester: number; year: number; enrollments: any[] }, allStudents: Student[]): Class {
+  static fromJSON(data: { topic: string; semester: number; year: number; enrollments: any[]; statistics: Statistics }, allStudents: Student[]): Class {
     const enrollments = data.enrollments
       ? data.enrollments.map((enrollmentData: any) => {
           const student = allStudents.find(s => s.getCPF() === enrollmentData.student.cpf);
@@ -109,6 +120,10 @@ export class Class {
         })
       : [];
     
-    return new Class(data.topic, data.semester, data.year, enrollments);
+    const statistics = data.statistics ? data.statistics : new Statistics();
+    
+    const classInstance = new Class(data.topic, data.semester, data.year, enrollments, statistics);
+        
+    return classInstance;
   }
 }

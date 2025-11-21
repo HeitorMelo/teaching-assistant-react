@@ -4,6 +4,7 @@ import { Student } from '../types/Student';
 import ClassService from '../services/ClassService';
 import { studentService } from '../services/StudentService';
 import EnrollmentService from '../services/EnrollmentService';
+import ClassComparison from './ClassComparison';
 
 interface ClassesProps {
   classes: Class[];
@@ -33,6 +34,11 @@ const Classes: React.FC<ClassesProps> = ({
   const [enrollmentPanelClass, setEnrollmentPanelClass] = useState<Class | null>(null);
   const [selectedStudentsForEnrollment, setSelectedStudentsForEnrollment] = useState<Set<string>>(new Set());
   const [isEnrolling, setIsEnrolling] = useState(false);
+  // Class comparison selection state
+  const [isCompareModalOpen, setIsCompareModalOpen] = useState(false);
+  const [selectedForComparison, setSelectedForComparison] = useState<Set<string>>(new Set());
+  const [comparisonClasses, setComparisonClasses] = useState<Class[]>([]);
+  const [compareModalError, setCompareModalError] = useState<string>('');
 
   // Load all students for enrollment dropdown
   const loadAllStudents = useCallback(async () => {
@@ -198,6 +204,55 @@ const Classes: React.FC<ClassesProps> = ({
     }
   };
 
+  // Comparison selection handlers
+  const handleOpenCompareModal = () => {
+    setSelectedForComparison(new Set());
+    setCompareModalError('');
+    setIsCompareModalOpen(true);
+  };
+
+  const handleCloseCompareModal = () => {
+    setIsCompareModalOpen(false);
+    setSelectedForComparison(new Set());
+  };
+
+  const handleToggleCompareSelection = (classId: string) => {
+    // Prevent selecting classes without data
+    const classObj = classes.find(c => c.id === classId);
+    if (!classObj) return;
+    if (!classObj.statistics || classObj.statistics.enrolled === 0) {
+      setCompareModalError('Selected class has no statistics and cannot be included.');
+      return;
+    }
+
+    const next = new Set(selectedForComparison);
+    if (next.has(classId)) {
+      next.delete(classId);
+      setCompareModalError('');
+    } else {
+      next.add(classId);
+      setCompareModalError('');
+    }
+    setSelectedForComparison(next);
+  };
+
+  const handleConfirmComparison = () => {
+    if (selectedForComparison.size < 2) {
+      setCompareModalError('Please select at least 2 classes to compare.');
+      return;
+    }
+
+    const chosen = classes.filter(c => selectedForComparison.has(c.id));
+    setComparisonClasses(chosen);
+    setIsCompareModalOpen(false);
+    setCompareModalError('');
+  };
+
+  const handleClearComparison = () => {
+    setComparisonClasses([]);
+    setSelectedForComparison(new Set());
+  };
+
   // Generate current year options
   const currentYear = new Date().getFullYear();
   const yearOptions = Array.from({ length: 10 }, (_, i) => currentYear - 5 + i);
@@ -327,6 +382,36 @@ const Classes: React.FC<ClassesProps> = ({
         )}
       </div>
 
+      {/* Class Comparison Controls */}
+      <div className="comparison-controls">
+        <button
+          type="button"
+          className="select-compare-btn"
+          onClick={handleOpenCompareModal}
+          disabled={classes.length === 0}
+        >
+          Select classes to compare
+        </button>
+
+        {comparisonClasses.length > 0 && (
+          <>
+            <button
+              type="button"
+              className="clear-compare-btn"
+              onClick={handleClearComparison}
+            >
+              Clear comparison
+            </button>
+            <span className="compare-count">{comparisonClasses.length} selected</span>
+          </>
+        )}
+      </div>
+
+      {/* Show comparison only for confirmed selected classes */}
+      {comparisonClasses.length > 0 && (
+        <ClassComparison classes={comparisonClasses} />
+      )}
+
       {/* Modern Enrollment Panel */}
       {enrollmentPanelClass && (
         <div className="enrollment-overlay">
@@ -426,6 +511,69 @@ const Classes: React.FC<ClassesProps> = ({
                     ? 'Enrolling...' 
                     : `Enroll ${selectedStudentsForEnrollment.size} Student${selectedStudentsForEnrollment.size !== 1 ? 's' : ''}`
                   }
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Comparison Selection Modal */}
+      {isCompareModalOpen && (
+        <div className="comparison-overlay">
+          <div className="comparison-modal">
+            <div className="comparison-modal-header">
+              <h3>Select Classes for Comparison</h3>
+              <button
+                className="close-modal-btn"
+                onClick={handleCloseCompareModal}
+                title="Close"
+              >
+                ×
+              </button>
+            </div>
+
+            <div className="comparison-modal-content">
+              {classes.length === 0 ? (
+                <p>No classes available to compare.</p>
+              ) : (
+                <div>
+                  <p className="compare-instruction">Select at least 2 classes to compare. Classes without data cannot be included.</p>
+                  <div className="comparison-list">
+                    {classes.map(c => {
+                      const noData = !c.statistics || c.statistics.enrolled === 0;
+                      return (
+                        <label
+                          key={c.id}
+                          className={`comparison-item ${selectedForComparison.has(c.id) ? 'selected' : ''} ${noData ? 'no-data' : ''}`}
+                        >
+                          <input
+                            type="checkbox"
+                            checked={selectedForComparison.has(c.id)}
+                            onChange={() => handleToggleCompareSelection(c.id)}
+                            disabled={noData}
+                          />
+                          <span className="comparison-item-label">{c.topic} ({c.year}/{c.semester})</span>
+                          {noData && <span className="no-data-badge">No data</span>}
+                        </label>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {compareModalError && (
+                <div className="comparison-error" role="alert">{compareModalError}</div>
+              )}
+
+              <div className="comparison-actions">
+                <button className="cancel-btn" onClick={handleCloseCompareModal}>Cancel</button>
+                <button
+                  className="confirm-compare-btn"
+                  onClick={handleConfirmComparison}
+                  disabled={selectedForComparison.size === 0}
+                >
+                  Confirm ({selectedForComparison.size})
                 </button>
               </div>
             </div>

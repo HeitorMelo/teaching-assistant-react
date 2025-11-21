@@ -5,6 +5,7 @@ import { Student } from './models/Student';
 import { Evaluation } from './models/Evaluation';
 import { Classes } from './models/Classes';
 import { Class } from './models/Class';
+import { Statistics } from './models/Statistics';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -49,7 +50,8 @@ const saveDataToFile = (): void => {
         enrollments: classObj.getEnrollments().map(enrollment => ({
           studentCPF: enrollment.getStudent().getCPF(),
           evaluations: enrollment.getEvaluations().map(evaluation => evaluation.toJSON())
-        }))
+        })),
+        statistics: classObj.getStatistics()
       }))
     };
     
@@ -121,6 +123,18 @@ const loadDataFromFile = (): void => {
                   console.error(`Student with CPF ${enrollmentData.studentCPF} not found for enrollment`);
                 }
               });
+            }
+
+            // Load statistics if provided in the JSON file
+            if (classData.statistics) {
+              const stats = new Statistics(
+                classData.statistics.meanGrade || 0,
+                classData.statistics.enrolled || 0,
+                classData.statistics.approved || 0,
+                classData.statistics.failedByGrade || 0,
+                classData.statistics.failedByAbsence || 0
+              );
+              classObj.setStatistics(stats);
             }
           } catch (error) {
             console.error(`Error adding class ${classData.topic}:`, error);

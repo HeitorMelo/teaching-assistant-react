@@ -1,4 +1,5 @@
 import { Enrollment } from './Enrollment';
+import { Statistics } from './Statistics';
 
 export interface Class {
   id: string;
@@ -6,6 +7,7 @@ export interface Class {
   semester: number;
   year: number;
   enrollments: Enrollment[];
+  statistics: Statistics;
 }
 
 export interface CreateClassRequest {
