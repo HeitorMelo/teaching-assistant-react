@@ -7,7 +7,6 @@ import { Classes } from './models/Classes';
 import { Class } from './models/Class';
 import * as fs from 'fs';
 import * as path from 'path';
-import { DefMedia, Grade } from './models/DefMedia';
 
 // usado para ler arquivos em POST
 const multer = require('multer');
@@ -90,7 +89,7 @@ const loadDataFromFile = (): void => {
       if (data.classes && Array.isArray(data.classes)) {
         data.classes.forEach((classData: any) => {
           try {
-            const classObj = new Class(classData.topic, classData.semester, classData.year, classData.defMedia);
+            const classObj = new Class(classData.topic, classData.semester, classData.year);
             classes.addClass(classObj);
 
             // Load enrollments for this class
@@ -275,17 +274,13 @@ app.get('/api/classes', (req: Request, res: Response) => {
 // POST /api/classes - Add a new class
 app.post('/api/classes', (req: Request, res: Response) => {
   try {
-    const { topic, semester, year, conceitoPeso, metaPeso } = req.body;
+    const { topic, semester, year } = req.body;
     
-    if (!topic || !semester || !year || !conceitoPeso || !metaPeso) {
+    if (!topic || !semester || !year) {
       return res.status(400).json({ error: 'Topic, semester, and year are required' });
     }
 
-    const conceitoPesoMap = new Map<Grade, number>(Object.entries(conceitoPeso) as [Grade, number][]);
-    const metaPesoMap = new Map<string, number>(Object.entries(metaPeso) as [string, number][]);
-
-    const defMedia = new DefMedia(conceitoPesoMap, metaPesoMap);
-    const classObj = new Class(topic, semester, year, defMedia);
+    const classObj = new Class(topic, semester, year);
     const newClass = classes.addClass(classObj);
     triggerSave(); // Save to file after adding class
     res.status(201).json(newClass.toJSON());
