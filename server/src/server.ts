@@ -5,6 +5,7 @@ import { Student } from './models/Student';
 import { Evaluation } from './models/Evaluation';
 import { Classes } from './models/Classes';
 import { Class } from './models/Class';
+import { Report } from './models/Report';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -483,6 +484,23 @@ app.put('/api/classes/:classId/enrollments/:studentCPF/evaluation', (req: Reques
 
     triggerSave(); // Save to file after evaluation update
     res.json(enrollment.toJSON());
+  } catch (error) {
+    res.status(400).json({ error: (error as Error).message });
+  }
+});
+
+// GET /api/classes/:classId/report - Generate statistics report for a class
+app.get('/api/classes/:classId/report', (req: Request, res: Response) => {
+  try {
+    const { classId } = req.params;
+    
+    const classObj = classes.findClassById(classId);
+    if (!classObj) {
+      return res.status(404).json({ error: 'Class not found' });
+    }
+
+    const report = new Report(classObj);
+    res.json(report.toJSON());
   } catch (error) {
     res.status(400).json({ error: (error as Error).message });
   }
