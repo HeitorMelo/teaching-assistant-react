@@ -19,16 +19,6 @@
       "name": "Joana Refatoração",
       "cpf": "55555555555",
       "email": "jr@gmail.com"
-    },
-    {
-      "name": "Teste Silva",
-      "cpf": "99999999999",
-      "email": "teste@test.com"
-    },
-    {
-      "name": "Test Student",
-      "cpf": "44444444444",
-      "email": "test@example.com"
     }
   ],
   "classes": [
@@ -111,18 +101,6 @@
               "grade": "MPA"
             }
           ]
-        },
-        {
-          "studentCPF": "33333333333",
-          "evaluations": []
-        },
-        {
-          "studentCPF": "99999999999",
-          "evaluations": []
-        },
-        {
-          "studentCPF": "44444444444",
-          "evaluations": []
         }
       ]
     },
