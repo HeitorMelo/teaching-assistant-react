@@ -2,9 +2,10 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Class, CreateClassRequest, getClassId } from '../types/Class';
 import { Student } from '../types/Student';
 import { Report } from '../types/Report';
-import ClassService from '../services/ClassService';
+import ClassService, { fetchClassReportsForComparison } from '../services/ClassService';
 import { studentService } from '../services/StudentService';
 import EnrollmentService from '../services/EnrollmentService';
+import ComparisonCharts from './ComparisonCharts';
 
 interface ClassesProps {
   classes: Class[];
@@ -39,6 +40,13 @@ const Classes: React.FC<ClassesProps> = ({
   const [reportPanelClass, setReportPanelClass] = useState<Class | null>(null);
   const [reportData, setReportData] = useState<Report | null>(null);
   const [isLoadingReport, setIsLoadingReport] = useState(false);
+
+  // Class comparison state
+  const [selectedClassesForComparison, setSelectedClassesForComparison] = useState<Set<string>>(new Set());
+  const [comparisonReports, setComparisonReports] = useState<{ [classId: string]: Report }>({});
+  const [isLoadingComparison, setIsLoadingComparison] = useState(false);
+  const [comparisonError, setComparisonError] = useState<string | null>(null);
+  const [comparisonViewType, setComparisonViewType] = useState<'table' | 'charts'>('charts');
 
   // Load all students for enrollment dropdown
   const loadAllStudents = useCallback(async () => {
@@ -142,6 +150,163 @@ const Classes: React.FC<ClassesProps> = ({
       setIsLoadingReport(false);
     }
   };
+
+  // Handle class selection for comparison
+  const handleClassSelectionToggle = (classId: string) => {
+    const MAX_SELECTION = 6;
+    const newSelection = new Set(selectedClassesForComparison);
+
+    if (newSelection.has(classId)) {
+      newSelection.delete(classId);
+      setSelectedClassesForComparison(newSelection);
+      setComparisonError(null);
+      return;
+    }
+
+    // Trying to add
+    if (newSelection.size >= MAX_SELECTION) {
+      setComparisonError('You are not allowed to select more than 6 classes for comparison');
+      return;
+    }
+
+    newSelection.add(classId);
+    setSelectedClassesForComparison(newSelection);
+    setComparisonError(null); // Clear error on new selection
+  };
+
+  // Handle comparison button click
+  const handleCompareClasses = async () => {
+    const selectedIds = Array.from(selectedClassesForComparison);
+    setIsLoadingComparison(true);
+    setComparisonError(null);
+    // Pre-check: ensure at least 2 selected
+    if (selectedIds.length < 2) {
+      setComparisonError('Please select at least 2 classes to compare');
+      setIsLoadingComparison(false);
+      return;
+    }
+
+    // Check for classes with no enrollments and inform user with names
+    const emptyClasses = selectedIds
+      .map(id => classes.find(c => c.id === id))
+      .filter(Boolean)
+      .filter(c => (c as Class).enrollments.length === 0) as Class[];
+
+    if (emptyClasses.length > 0) {
+      const names = emptyClasses.map(c => c.topic);
+      const first = names[0];
+      const others = names.length - 1;
+      const msg = others > 0
+        ? `The class "${first}" and ${others} other(s) have no enrolled students`
+        : `The class "${first}" has no enrolled students`;
+      setComparisonError(msg);
+      setIsLoadingComparison(false);
+      return;
+    }
+
+    const result = await fetchClassReportsForComparison(selectedIds);
+
+    if (result.error) {
+      setComparisonError(result.error);
+      setIsLoadingComparison(false);
+      return;
+    }
+
+    setComparisonReports(result.reports);
+    setIsLoadingComparison(false);
+  };
+
+  // Handle closing comparison view
+  const handleCloseComparison = () => {
+    setComparisonReports({});
+    setComparisonError(null);
+  };
+
+  // Additional comparison modal helpers
+  const [addClassToComparison, setAddClassToComparison] = useState<string>('');
+  const [pendingRemoveClassId, setPendingRemoveClassId] = useState<string | null>(null);
+  const [showRemovalDecision, setShowRemovalDecision] = useState(false);
+
+  const handleExportComparison = () => {
+    const data = Array.from(selectedClassesForComparison).map(id => {
+      const cls = classes.find(c => c.id === id);
+      return {
+        class: cls ? `${cls.topic} (${cls.year}/${cls.semester})` : id,
+        report: comparisonReports[id]
+      };
+    });
+
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `comparison-${new Date().toISOString()}.json`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  };
+
+  const handleAddClassToComparison = async () => {
+    if (!addClassToComparison) return;
+    const MAX_SELECTION = 6;
+    if (selectedClassesForComparison.size >= MAX_SELECTION) {
+      setComparisonError('You cannot add more than 6 classes to the comparison');
+      return;
+    }
+
+    const newSelection = new Set(selectedClassesForComparison);
+    newSelection.add(addClassToComparison);
+    setSelectedClassesForComparison(newSelection);
+
+    // Fetch report for newly added class
+    try {
+      const report = await ClassService.getClassReport(addClassToComparison);
+      setComparisonReports(prev => ({ ...prev, [addClassToComparison]: report }));
+      setComparisonError(null);
+      setAddClassToComparison('');
+    } catch (err) {
+      setComparisonError((err as Error).message || 'Failed to load report for the added class');
+    }
+  };
+
+  const handleRemoveFromComparisonPrompt = (classId: string) => {
+    // If removing would leave fewer than 2 classes, ask the user
+    if (selectedClassesForComparison.size <= 2) {
+      setPendingRemoveClassId(classId);
+      setShowRemovalDecision(true);
+      return;
+    }
+
+    // Otherwise remove immediately
+    const newSelection = new Set(selectedClassesForComparison);
+    newSelection.delete(classId);
+    setSelectedClassesForComparison(newSelection);
+    // also remove report
+    const newReports = { ...comparisonReports };
+    delete newReports[classId];
+    setComparisonReports(newReports);
+  };
+
+  const handleConfirmClearDisplay = () => {
+    setSelectedClassesForComparison(new Set());
+    setComparisonReports({});
+    setPendingRemoveClassId(null);
+    setShowRemovalDecision(false);
+  };
+
+  const handleCancelRemovalDecision = () => {
+    setPendingRemoveClassId(null);
+    setShowRemovalDecision(false);
+  };
+
+  // Safe list of selected classes that have loaded reports
+  const selectedClassesWithReports: Class[] = Array.from(selectedClassesForComparison)
+    .map(id => classes.find(c => c.id === id))
+    .filter((c): c is Class => {
+      if (!c) return false;
+      return Boolean(comparisonReports[c.id]);
+    });
 
   // Handle closing report panel
   const handleCloseReportPanel = () => {
@@ -310,6 +475,13 @@ const Classes: React.FC<ClassesProps> = ({
             <table>
               <thead>
                 <tr>
+                  <th className="checkbox-col">
+                    <input 
+                      type="checkbox" 
+                      title="Select for comparison"
+                      disabled 
+                    />
+                  </th>
                   <th>Topic</th>
                   <th>Year</th>
                   <th>Semester</th>
@@ -320,6 +492,14 @@ const Classes: React.FC<ClassesProps> = ({
               <tbody>
                 {classes.map((classObj) => (
                   <tr key={getClassId(classObj)}>
+                    <td className="checkbox-col">
+                      <input 
+                        type="checkbox"
+                        checked={selectedClassesForComparison.has(classObj.id)}
+                        onChange={() => handleClassSelectionToggle(classObj.id)}
+                        title="Select for comparison"
+                      />
+                    </td>
                     <td><strong>{classObj.topic}</strong></td>
                     <td><strong>{classObj.year}</strong></td>
                     <td><strong>{classObj.semester === 1 ? '1st Semester' : '2nd Semester'}</strong></td>
@@ -360,6 +540,25 @@ const Classes: React.FC<ClassesProps> = ({
                 ))}
               </tbody>
             </table>
+
+            {/* Comparison Controls */}
+            {classes.length > 1 && (
+              <div className="comparison-controls">
+                <p className="selection-info">
+                  {selectedClassesForComparison.size === 0 
+                    ? 'Select at least 2 classes to compare'
+                    : `${selectedClassesForComparison.size} class${selectedClassesForComparison.size !== 1 ? 'es' : ''} selected`
+                  }
+                </p>
+                <button
+                  className="compare-btn"
+                  onClick={handleCompareClasses}
+                  disabled={selectedClassesForComparison.size < 2 || isLoadingComparison}
+                >
+                  {isLoadingComparison ? 'Loading...' : `Compare (${selectedClassesForComparison.size})`}
+                </button>
+              </div>
+            )}
           </div>
         )}
       </div>
@@ -575,6 +774,185 @@ const Classes: React.FC<ClassesProps> = ({
               >
                 Close
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Comparison View Modal */}
+      {Object.keys(comparisonReports).length > 0 && (
+        <div className="comparison-overlay">
+          <div className="comparison-modal">
+            <div className="comparison-modal-header">
+              <h3>Class Performance Comparison</h3>
+              <div className="comparison-header-actions">
+                <button 
+                  className="export-btn"
+                  onClick={handleExportComparison}
+                  title="Export comparison"
+                >
+                  Export
+                </button>
+                <button 
+                  className="close-modal-btn"
+                  onClick={handleCloseComparison}
+                  title="Close"
+                >
+                  ×
+                </button>
+              </div>
+            </div>
+
+            {/* View Type Selector */}
+            <div className="comparison-view-selector">
+              <button
+                className={`view-btn ${comparisonViewType === 'charts' ? 'active' : ''}`}
+                onClick={() => setComparisonViewType('charts')}
+              >
+                📊 Charts View
+              </button>
+              <button
+                className={`view-btn ${comparisonViewType === 'table' ? 'active' : ''}`}
+                onClick={() => setComparisonViewType('table')}
+              >
+                📋 Table View
+              </button>
+            </div>
+            {/* Add / Export Controls */}
+            <div className="comparison-add-controls" style={{ padding: '0 1.5rem 1rem' }}>
+              <select
+                value={addClassToComparison}
+                onChange={(e) => setAddClassToComparison(e.target.value)}
+                aria-label="Add class to comparison"
+              >
+                <option value="">-- Add class to comparison --</option>
+                {classes
+                  .filter(c => !selectedClassesForComparison.has(c.id))
+                  .map(c => (
+                    <option key={c.id} value={c.id}>{`${c.topic} (${c.year}/${c.semester})`}</option>
+                  ))}
+              </select>
+              <button
+                className="add-class-btn"
+                onClick={handleAddClassToComparison}
+                disabled={!addClassToComparison}
+                style={{ marginLeft: 8 }}
+              >
+                Add
+              </button>
+            </div>
+
+            <div className="comparison-modal-content">
+              {comparisonError && (
+                <div className="comparison-error">
+                  <p>{comparisonError}</p>
+                </div>
+              )}
+
+              {/* Charts View */}
+              {comparisonViewType === 'charts' && (
+                <ComparisonCharts 
+                  selectedClasses={selectedClassesWithReports}
+                  comparisonReports={comparisonReports}
+                />
+              )}
+
+              {/* Table View */}
+              {comparisonViewType === 'table' && (
+                <div className="comparison-reports-container">
+                  {Array.from(selectedClassesForComparison).map((classId) => {
+                    const report = comparisonReports[classId];
+                    const classObj = classes.find(c => c.id === classId);
+
+                    if (!classObj || !report) return null;
+
+                    return (
+                      <div key={classId} className="comparison-report-card">
+                        <div className="report-card-header">
+                          <h4>{classObj.topic}</h4>
+                          <p className="report-card-meta">
+                            {classObj.year}/{classObj.semester}
+                          </p>
+                          <button
+                            className="remove-class-btn"
+                            onClick={() => handleRemoveFromComparisonPrompt(classId)}
+                            title="Remove from comparison"
+                          >
+                            Remove
+                          </button>
+                        </div>
+
+                        <div className="report-card-content">
+                          <div className="metric-row">
+                            <span className="metric-label">Mean Grade:</span>
+                            <span className="metric-value">{report.studentsAverage.toFixed(2)}</span>
+                          </div>
+                          <div className="metric-row">
+                            <span className="metric-label">Enrolled:</span>
+                            <span className="metric-value">{report.totalEnrolled}</span>
+                          </div>
+                          <div className="metric-row approved">
+                            <span className="metric-label">Approved:</span>
+                            <span className="metric-value">{report.approvedCount}</span>
+                          </div>
+                          <div className="metric-row failed">
+                            <span className="metric-label">Failed:</span>
+                            <span className="metric-value">{report.notApprovedCount}</span>
+                          </div>
+                          <div className="metric-row">
+                            <span className="metric-label">Approval Rate:</span>
+                            <span className="metric-value">
+                              {report.totalEnrolled > 0 
+                                ? Math.round((report.approvedCount / report.totalEnrolled) * 100)
+                                : 0
+                              }%
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
+            <div className="comparison-actions">
+              <button 
+                className="cancel-btn"
+                onClick={handleCloseComparison}
+              >
+                Close Comparison
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Error Message for Comparison */}
+      {comparisonError && !Object.keys(comparisonReports).length && (
+        <div className="comparison-error-modal">
+          <div className="error-content">
+            <h4>Comparison Error</h4>
+            <p>{comparisonError}</p>
+            <button 
+              className="ok-btn"
+              onClick={() => setComparisonError(null)}
+            >
+              OK
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Removal decision modal: when removing would leave fewer than 2 classes */}
+      {showRemovalDecision && (
+        <div className="comparison-error-modal">
+          <div className="error-content">
+            <h4>Not enough classes</h4>
+            <p>Removing this class would leave fewer than two classes for comparison. Do you want to clear the comparison display or keep the existing classes?</p>
+            <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center', marginTop: '1rem' }}>
+              <button className="cancel-btn" onClick={handleConfirmClearDisplay}>Clear display</button>
+              <button className="ok-btn" onClick={handleCancelRemovalDecision}>Keep classes</button>
             </div>
           </div>
         </div>
