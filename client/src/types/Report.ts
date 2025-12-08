@@ -1,6 +1,13 @@
+export type StudentStatus = 
+  | 'APPROVED'
+  | 'APPROVED_FINAL'
+  | 'FAILED'
+  | 'FAILED_BY_ABSENCE'
+  | 'PENDING';
+
 export interface EvaluationPerformance {
   goal: string;
-  averageGrade: number;
+  averageGrade: number | null;
   gradeDistribution: {
     MANA: number;
     MPA: number;
@@ -10,16 +17,14 @@ export interface EvaluationPerformance {
 }
 
 export interface ReportFilter {
-  type: 'ALL' | 'APPROVED' | 'APPROVED_FINAL' | 'FAILED' | 'FAILED_BY_ABSENCE' | 'BELOW_AVERAGE' | 'BELOW_THRESHOLD';
+  type: 'ALL' | 'APPROVED' | 'APPROVED_FINAL' | 'FAILED' | 'FAILED_BY_ABSENCE' | 'PENDING' | 'BELOW_AVERAGE' | 'BELOW_THRESHOLD';
   threshold?: number; 
 }
-
-export type StudentStatus = 'APPROVED' | 'APPROVED_FINAL' | 'FAILED' | 'FAILED_BY_ABSENCE';
 
 export interface StudentEntry {
   studentId: string;
   name: string;
-  finalGrade: number;
+  finalGrade: number | null;
   status: StudentStatus;
 }
 
@@ -29,11 +34,12 @@ export interface ReportData {
   semester: number;
   year: number;
   totalEnrolled: number;
-  studentsAverage: number;
+  studentsAverage: number | null;
   approvedCount: number;
   approvedFinalCount: number;
   notApprovedCount: number;
   failedByAbsenceCount: number;
+  pendingCount: number;
   evaluationPerformance: EvaluationPerformance[];
   students: StudentEntry[]; 
   generatedAt: Date;

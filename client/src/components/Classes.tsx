@@ -507,7 +507,7 @@ const Classes: React.FC<ClassesProps> = ({
                       </div>
                       <div className="stat-item">
                         <span className="stat-label">Class Average:</span>
-                        <span className="stat-value">{(reportData.studentsAverage ?? 0).toFixed(2)}</span>
+                        <span className="stat-value">{reportData.studentsAverage !== null ? reportData.studentsAverage.toFixed(2) : '–'}</span>
                       </div>
                     </div>
 
@@ -520,6 +520,10 @@ const Classes: React.FC<ClassesProps> = ({
                       <div className="stat-item">
                         <span className="stat-label">Not Approved:</span>
                         <span className="stat-value not-approved">{reportData.notApprovedCount}</span>
+                      </div>
+                      <div className="stat-item">
+                        <span className="stat-label">Pending:</span>
+                        <span className="stat-value pending">{reportData.pendingCount}</span>
                       </div>
                     </div>
                   </div>
@@ -546,7 +550,7 @@ const Classes: React.FC<ClassesProps> = ({
                             {reportData.evaluationPerformance.map((performance) => (
                               <tr key={performance.goal}>
                                 <td><strong>{performance.goal}</strong></td>
-                                <td>{(performance.averageGrade ?? 0).toFixed(2)}</td>
+                                <td>{performance.averageGrade !== null ? performance.averageGrade.toFixed(2) : '–'}</td>
                                 <td>{performance.evaluatedStudents}</td>
                                 <td className="grade-ma">{performance.gradeDistribution.MA}</td>
                                 <td className="grade-mpa">{performance.gradeDistribution.MPA}</td>

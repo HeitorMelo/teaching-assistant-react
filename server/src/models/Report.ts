@@ -1,10 +1,13 @@
 import { Class } from './Class';
 import { Enrollment } from './Enrollment';
 import { Grade } from './Evaluation';
+import { StudentStatus, IApprovalCriteria, DefaultApprovalCriteria } from './ApprovalCriteria';
+
+export { StudentStatus } from './ApprovalCriteria';
 
 export interface EvaluationPerformance {
   goal: string;
-  averageGrade: number;
+  averageGrade: number | null;
   gradeDistribution: {
     MANA: number;
     MPA: number;
@@ -13,12 +16,10 @@ export interface EvaluationPerformance {
   evaluatedStudents: number;
 }
 
-export type StudentStatus = 'APPROVED' | 'APPROVED_FINAL' | 'FAILED' | 'FAILED_BY_ABSENCE';
-
 export interface StudentEntry {
   studentId: string;
   name: string;
-  finalGrade: number;
+  finalGrade: number | null;
   status: StudentStatus;
 }
 
@@ -28,11 +29,12 @@ export interface ReportData {
   semester: number;
   year: number;
   totalEnrolled: number;
-  studentsAverage: number;
+  studentsAverage: number | null;
   approvedCount: number;
   approvedFinalCount: number;
   notApprovedCount: number;
   failedByAbsenceCount: number;
+  pendingCount: number;
   evaluationPerformance: EvaluationPerformance[];
   students: StudentEntry[];
   generatedAt: Date;
@@ -44,12 +46,18 @@ export interface IReportGenerator {
 
 export class Report implements IReportGenerator {
   private classObj: Class;
+  private approvalCriteria: IApprovalCriteria;
 
-  constructor(classObj: Class) {
+  constructor(classObj: Class, approvalCriteria: IApprovalCriteria = new DefaultApprovalCriteria()) {
     this.classObj = classObj;
+    this.approvalCriteria = approvalCriteria;
   }
 
-  private calculateStudentAverage(enrollment: Enrollment): number {
+
+  
+  // Calculates the student average. Returns null if no grade data is available.
+   
+  private calculateStudentAverage(enrollment: Enrollment): number | null {
     const mediaPreFinal = enrollment.getMediaPreFinal();
     if (mediaPreFinal !== null && mediaPreFinal !== 0) {
       return mediaPreFinal;
@@ -58,7 +66,7 @@ export class Report implements IReportGenerator {
     const evaluations = enrollment.getEvaluations();
     
     if (evaluations.length === 0) {
-      return 0;
+      return null;
     }
 
     const notasDasMetas = new Map<string, Grade>();
@@ -68,23 +76,30 @@ export class Report implements IReportGenerator {
 
     try {
       const especificacao = this.classObj.getEspecificacaoDoCalculoDaMedia();
-      return especificacao.calc(notasDasMetas);
+      const result = especificacao.calc(notasDasMetas);
+
+      if (!isNaN(result)) {
+        return result;
+      }
     } catch {
-      const gradeValues: Record<Grade, number> = {
-        'MA': 10,
-        'MPA': 7,
-        'MANA': 0
-      };
-
-      const totalGrade = evaluations.reduce((sum, evaluation) => {
-        return sum + gradeValues[evaluation.getGrade()];
-      }, 0);
-
-      return totalGrade / evaluations.length;
+      // Fall through to simple average calculation
     }
-  }
 
-  private getStudentFinalGrade(enrollment: Enrollment): number {
+    const gradeValues: Record<Grade, number> = {
+      'MA': 10,
+      'MPA': 7,
+      'MANA': 0
+    };
+
+    const totalGrade = evaluations.reduce((sum, evaluation) => {
+      return sum + gradeValues[evaluation.getGrade()];
+    }, 0);
+
+    return totalGrade / evaluations.length;
+  }
+   
+  // Gets the student's final grade. Returns null if no grade data is available.
+  private getStudentFinalGrade(enrollment: Enrollment): number | null {
     const mediaPosFinal = enrollment.getMediaPosFinal();
     if (mediaPosFinal !== null && mediaPosFinal !== 0) {
       return mediaPosFinal;
@@ -92,54 +107,45 @@ export class Report implements IReportGenerator {
     return this.calculateStudentAverage(enrollment);
   }
 
-  private calculateClassAverage(): number {
+  // Calculates the class average. Returns null if no students have grades.
+  private calculateClassAverage(): number | null {
     const enrollments = this.classObj.getEnrollments();
     
     if (enrollments.length === 0) {
-      return 0;
+      return null;
     }
 
-    const totalAverage = enrollments.reduce((sum, enrollment) => {
-      return sum + this.getStudentFinalGrade(enrollment);
-    }, 0);
+    // Only include students who have grade data
+    const gradesWithData = enrollments
+      .map(enrollment => this.getStudentFinalGrade(enrollment))
+      .filter((grade): grade is number => grade !== null);
 
-    return totalAverage / enrollments.length;
+    if (gradesWithData.length === 0) {
+      return null;
+    }
+
+    const totalAverage = gradesWithData.reduce((sum, grade) => sum + grade, 0);
+    return Math.round((totalAverage / gradesWithData.length) * 100) / 100;
   }
 
-
+  // Determines the student status using the configured approval criteria strategy.
   private getStudentStatus(enrollment: Enrollment): StudentStatus {
-    if (enrollment.getReprovadoPorFalta()) {
-      return 'FAILED_BY_ABSENCE';
-    }
-
     const mediaPreFinal = this.calculateStudentAverage(enrollment);
-    const mediaPosFinal = enrollment.getMediaPosFinal();
-
-    if (mediaPosFinal !== null && mediaPosFinal !== 0) {
-      if (mediaPosFinal >= 5.0) {
-        return 'APPROVED_FINAL';
-      }
-      return 'FAILED';
-    }
-
-    if (mediaPreFinal >= 7.0) {
-      return 'APPROVED';
-    }
-
-    if (mediaPreFinal < 3.0) {
-      return 'FAILED';
-    }
-
-    return 'FAILED';
+    return this.approvalCriteria.determineStatus(enrollment, mediaPreFinal);
   }
 
-  private calculateApprovalStats(): { approved: number; approvedFinal: number; notApproved: number; failedByAbsence: number } {
+  private calculateApprovalStats(): { approved: number;
+                                      approvedFinal: number; 
+                                      notApproved: number; 
+                                      failedByAbsence: number; 
+                                      pending: number } {
     const enrollments = this.classObj.getEnrollments();
     
     let approved = 0;
     let approvedFinal = 0;
     let notApproved = 0;
     let failedByAbsence = 0;
+    let pending = 0;
 
     enrollments.forEach(enrollment => {
       const status = this.getStudentStatus(enrollment);
@@ -149,12 +155,14 @@ export class Report implements IReportGenerator {
         approvedFinal++;
       } else if (status === 'FAILED_BY_ABSENCE') {
         failedByAbsence++;
+      } else if (status === 'PENDING') {
+        pending++;
       } else {
         notApproved++;
       }
     });
 
-    return { approved, approvedFinal, notApproved, failedByAbsence };
+    return { approved, approvedFinal, notApproved, failedByAbsence, pending };
   }
 
   private calculateEvaluationPerformance(): EvaluationPerformance[] {
@@ -196,11 +204,11 @@ export class Report implements IReportGenerator {
         return sum + gradeValues[grade];
       }, 0);
 
-      const averageGrade = data.grades.length > 0 ? totalGrade / data.grades.length : 0;
+      const averageGrade = data.grades.length > 0 ? totalGrade / data.grades.length : null;
 
       performance.push({
         goal,
-        averageGrade: Math.round(averageGrade * 100) / 100, // Round to 2 decimal places
+        averageGrade: averageGrade !== null ? Math.round(averageGrade * 100) / 100 : null,
         gradeDistribution: data.gradeDistribution,
         evaluatedStudents: data.grades.length
       });
@@ -214,7 +222,8 @@ export class Report implements IReportGenerator {
     
     return enrollments.map(enrollment => {
       const student = enrollment.getStudent();
-      const finalGrade = Math.round(this.getStudentFinalGrade(enrollment) * 100) / 100;
+      const rawGrade = this.getStudentFinalGrade(enrollment);
+      const finalGrade = rawGrade !== null ? Math.round(rawGrade * 100) / 100 : null;
       
       return {
         studentId: student.getCPF(),
@@ -234,6 +243,7 @@ export class Report implements IReportGenerator {
     const approvalStats = this.calculateApprovalStats();
     const evaluationPerformance = this.calculateEvaluationPerformance();
     const students = this.getStudentReports();
+    const classAverage = this.calculateClassAverage();
 
     return {
       classId: this.classObj.getClassId(),
@@ -241,11 +251,12 @@ export class Report implements IReportGenerator {
       semester: this.classObj.getSemester(),
       year: this.classObj.getYear(),
       totalEnrolled: enrollments.length,
-      studentsAverage: Math.round(this.calculateClassAverage() * 100) / 100,
+      studentsAverage: classAverage,
       approvedCount: approvalStats.approved,
       approvedFinalCount: approvalStats.approvedFinal,
       notApprovedCount: approvalStats.notApproved,
       failedByAbsenceCount: approvalStats.failedByAbsence,
+      pendingCount: approvalStats.pending,
       evaluationPerformance,
       students,
       generatedAt: new Date()
