@@ -9,7 +9,21 @@ export interface EvaluationPerformance {
   evaluatedStudents: number;
 }
 
-export interface Report {
+export interface ReportFilter {
+  type: 'ALL' | 'APPROVED' | 'APPROVED_FINAL' | 'FAILED' | 'BELOW_AVERAGE' | 'BELOW_THRESHOLD';
+  threshold?: number; 
+}
+
+export type StudentStatus = 'APPROVED' | 'APPROVED_FINAL' | 'FAILED';
+
+export interface StudentEntry {
+  studentId: string;
+  name: string;
+  finalGrade: number;
+  status: StudentStatus;
+}
+
+export interface ReportData {
   classId: string;
   topic: string;
   semester: number;
@@ -17,7 +31,9 @@ export interface Report {
   totalEnrolled: number;
   studentsAverage: number;
   approvedCount: number;
+  approvedFinalCount: number;
   notApprovedCount: number;
   evaluationPerformance: EvaluationPerformance[];
-  generatedAt: string;
+  students: StudentEntry[]; 
+  generatedAt: Date;
 }

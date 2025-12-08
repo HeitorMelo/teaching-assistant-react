@@ -2,7 +2,7 @@ import { Class } from './Class';
 import { Enrollment } from './Enrollment';
 import { Grade } from './Evaluation';
 
-interface EvaluationPerformance {
+export interface EvaluationPerformance {
   goal: string;
   averageGrade: number;
   gradeDistribution: {
@@ -13,7 +13,16 @@ interface EvaluationPerformance {
   evaluatedStudents: number;
 }
 
-interface ReportData {
+export type StudentStatus = 'APPROVED' | 'APPROVED_FINAL' | 'FAILED';
+
+export interface StudentEntry {
+  studentId: string;
+  name: string;
+  finalGrade: number;
+  status: StudentStatus;
+}
+
+export interface ReportData {
   classId: string;
   topic: string;
   semester: number;
@@ -21,12 +30,18 @@ interface ReportData {
   totalEnrolled: number;
   studentsAverage: number;
   approvedCount: number;
+  approvedFinalCount: number;
   notApprovedCount: number;
   evaluationPerformance: EvaluationPerformance[];
+  students: StudentEntry[];
   generatedAt: Date;
 }
 
-export class Report {
+export interface IReportGenerator {
+  generate(): ReportData;
+}
+
+export class Report implements IReportGenerator {
   private classObj: Class;
 
   constructor(classObj: Class) {
@@ -71,21 +86,34 @@ export class Report {
     return this.calculateStudentAverage(enrollment) >= 7.0;
   }
 
-  private calculateApprovalStats(): { approved: number; notApproved: number } {
+  private getStudentStatus(enrollment: Enrollment): StudentStatus {
+    const average = this.calculateStudentAverage(enrollment);
+    if (average >= 7.0) {
+      return 'APPROVED';
+    }
+    // TODO: Add logic for APPROVED_FINAL when final exam is implemented
+    return 'FAILED';
+  }
+
+  private calculateApprovalStats(): { approved: number; approvedFinal: number; notApproved: number } {
     const enrollments = this.classObj.getEnrollments();
     
     let approved = 0;
+    let approvedFinal = 0;
     let notApproved = 0;
 
     enrollments.forEach(enrollment => {
-      if (this.isStudentApproved(enrollment)) {
+      const status = this.getStudentStatus(enrollment);
+      if (status === 'APPROVED') {
         approved++;
+      } else if (status === 'APPROVED_FINAL') {
+        approvedFinal++;
       } else {
         notApproved++;
       }
     });
 
-    return { approved, notApproved };
+    return { approved, approvedFinal, notApproved };
   }
 
   private calculateEvaluationPerformance(): EvaluationPerformance[] {
@@ -140,10 +168,31 @@ export class Report {
     return performance.sort((a, b) => a.goal.localeCompare(b.goal));
   }
 
+  private getStudentReports(): StudentEntry[] {
+    const enrollments = this.classObj.getEnrollments();
+    
+    return enrollments.map(enrollment => {
+      const student = enrollment.getStudent();
+      const finalGrade = Math.round(this.calculateStudentAverage(enrollment) * 100) / 100;
+      
+      return {
+        studentId: student.getCPF(),
+        name: student.name,
+        finalGrade,
+        status: this.getStudentStatus(enrollment)
+      };
+    });
+  }
+
+  /**
+   * Generates the full class report.
+   * @returns ReportData object compliant with the interface.
+   */
   public generate(): ReportData {
     const enrollments = this.classObj.getEnrollments();
     const approvalStats = this.calculateApprovalStats();
     const evaluationPerformance = this.calculateEvaluationPerformance();
+    const students = this.getStudentReports();
 
     return {
       classId: this.classObj.getClassId(),
@@ -153,8 +202,10 @@ export class Report {
       totalEnrolled: enrollments.length,
       studentsAverage: Math.round(this.calculateClassAverage() * 100) / 100,
       approvedCount: approvalStats.approved,
+      approvedFinalCount: approvalStats.approvedFinal,
       notApprovedCount: approvalStats.notApproved,
       evaluationPerformance,
+      students,
       generatedAt: new Date()
     };
   }
