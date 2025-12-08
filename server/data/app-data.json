@@ -33,9 +33,12 @@
           "MANA": 0
         },
         "pesosDasMetas": {
-          "Gerência de Configuração": 1,
-          "Gerência de Projeto": 1,
-          "Qualidade de Software": 1
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
         }
       },
       "enrollments": [
@@ -44,7 +47,7 @@
           "evaluations": [
             {
               "goal": "Requirements",
-              "grade": "MPA"
+              "grade": "MA"
             },
             {
               "goal": "Configuration Management",
@@ -60,7 +63,7 @@
             },
             {
               "goal": "Tests",
-              "grade": "MPA"
+              "grade": "MA"
             },
             {
               "goal": "Refactoring",
@@ -81,15 +84,15 @@
             },
             {
               "goal": "Project Management",
-              "grade": "MPA"
+              "grade": "MANA"
             },
             {
               "goal": "Design",
-              "grade": "MA"
+              "grade": "MANA"
             },
             {
               "goal": "Refactoring",
-              "grade": "MA"
+              "grade": "MANA"
             },
             {
               "goal": "Tests",
@@ -102,14 +105,18 @@
           "evaluations": [
             {
               "goal": "Configuration Management",
-              "grade": "MANA"
-            },
-            {
-              "goal": "Requirements",
               "grade": "MA"
             },
             {
               "goal": "Project Management",
+              "grade": "MPA"
+            },
+            {
+              "goal": "Tests",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Refactoring",
               "grade": "MPA"
             }
           ]
@@ -127,9 +134,12 @@
           "MANA": 0
         },
         "pesosDasMetas": {
-          "Gerência de Configuração": 1,
-          "Gerência de Projeto": 1,
-          "Qualidade de Software": 1
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
         }
       },
       "enrollments": [
