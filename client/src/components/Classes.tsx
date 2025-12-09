@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Class, CreateClassRequest, getClassId } from '../types/Class';
 import { Student } from '../types/Student';
-import { Report } from '../types/Report';
+import { ReportData } from '../types/Report';
 import ClassService, { fetchClassReportsForComparison } from '../services/ClassService';
 import { studentService } from '../services/StudentService';
 import EnrollmentService from '../services/EnrollmentService';
@@ -45,12 +45,12 @@ const Classes: React.FC<ClassesProps> = ({
 
   // Report state - only track which class to show report for
   const [reportPanelClass, setReportPanelClass] = useState<Class | null>(null);
-  const [reportData, setReportData] = useState<Report | null>(null);
+  const [reportData, setReportData] = useState<ReportData | null>(null);
   const [isLoadingReport, setIsLoadingReport] = useState(false);
 
   // Class comparison state
   const [selectedClassesForComparison, setSelectedClassesForComparison] = useState<Set<string>>(new Set());
-  const [comparisonReports, setComparisonReports] = useState<{ [classId: string]: Report }>({});
+  const [comparisonReports, setComparisonReports] = useState<{ [classId: string]: ReportData }>({});
   const [isLoadingComparison, setIsLoadingComparison] = useState(false);
   const [comparisonError, setComparisonError] = useState<string | null>(null);
   const [comparisonViewType, setComparisonViewType] = useState<'table' | 'charts'>('charts');
@@ -153,7 +153,7 @@ const Classes: React.FC<ClassesProps> = ({
   };
 
   // Handle opening report panel for a specific class
-  const handleOpenReportPanel = (classObj: Class) => {
+  const handleOpenReportPanel = async (classObj: Class) => {
     setReportPanelClass(classObj);
     setIsLoadingReport(true);
     
@@ -831,7 +831,7 @@ const Classes: React.FC<ClassesProps> = ({
                         <div className="report-card-content">
                           <div className="metric-row">
                             <span className="metric-label">Mean Grade:</span>
-                            <span className="metric-value">{report.studentsAverage.toFixed(2)}</span>
+                            <span className="metric-value">{report.studentsAverage?.toFixed(2) ?? 'N/A'}</span>
                           </div>
                           <div className="metric-row">
                             <span className="metric-label">Enrolled:</span>

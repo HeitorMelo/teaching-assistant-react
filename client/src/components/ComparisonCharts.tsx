@@ -11,12 +11,12 @@ import {
   LineChart,
   Line,
 } from 'recharts';
-import { Report } from '../types/Report';
+import { ReportData } from '../types/Report';
 import { Class } from '../types/Class';
 
 interface ComparisonChartsProps {
   selectedClasses: Class[];
-  comparisonReports: { [classId: string]: Report };
+  comparisonReports: { [classId: string]: ReportData };
 }
 
 const ComparisonCharts: React.FC<ComparisonChartsProps> = ({ 

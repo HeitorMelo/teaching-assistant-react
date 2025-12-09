@@ -101,13 +101,13 @@ class ClassService {
 // Utility: Fetch multiple class reports and handle errors for comparison scenarios
 // Usage: fetchClassReportsForComparison(['id1', 'id2'])
 export async function fetchClassReportsForComparison(classIds: string[]): Promise<
-  { reports: { [classId: string]: Report }, error?: string }
+  { reports: { [classId: string]: ReportData }, error?: string }
 > {
   if (classIds.length < 2) {
     return { reports: {}, error: 'At least two classes are required for comparison.' };
   }
 
-  const reports: { [classId: string]: Report } = {};
+  const reports: { [classId: string]: ReportData } = {};
   for (const classId of classIds) {
     try {
       const report = await ClassService.getClassReport(classId);
