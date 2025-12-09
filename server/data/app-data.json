@@ -39,26 +39,6 @@
       "name": "Diego Oliveira",
       "cpf": "88888888888",
       "email": "diego.oliveira@cin.ufpe.br"
-    },
-    {
-      "name": "ESS Student 1",
-      "cpf": "22972996579",
-      "email": "essstudent1@example.com"
-    },
-    {
-      "name": "ESS Student 2",
-      "cpf": "13359262002",
-      "email": "essstudent2@example.com"
-    },
-    {
-      "name": "MD Student 1",
-      "cpf": "43717893392",
-      "email": "mdstudent1@example.com"
-    },
-    {
-      "name": "MD Student 2",
-      "cpf": "40350857981",
-      "email": "mdstudent2@example.com"
     }
   ],
   "classes": [
