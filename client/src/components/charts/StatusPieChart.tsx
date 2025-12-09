@@ -50,7 +50,7 @@ const StatusPieChart: React.FC<StatusPieChartProps> = ({ data }) => {
     <div className="chart-container">
       <h4>Student Status Distribution</h4>
       <div className="chart-wrapper">
-        <ResponsiveContainer width="100%" height={300}>
+        <ResponsiveContainer width="100%" height="100%">
           {hasData ? (
             <PieChart>
               <Pie
@@ -59,7 +59,7 @@ const StatusPieChart: React.FC<StatusPieChartProps> = ({ data }) => {
                 cy="50%"
                 labelLine={false}
                 label={renderCustomLabel}
-                outerRadius={100}
+                outerRadius={80}
                 fill="#8884d8"
                 dataKey="value"
               >
@@ -78,26 +78,38 @@ const StatusPieChart: React.FC<StatusPieChartProps> = ({ data }) => {
                 data={[{ name: 'No Data', value: 1 }]}
                 cx="50%"
                 cy="50%"
-                outerRadius={100}
+                outerRadius={80}
                 fill="#e0e0e0"
                 dataKey="value"
                 label={false}
               >
                 <Cell fill="#e0e0e0" />
               </Pie>
-              <text
-                x="50%"
-                y="50%"
-                textAnchor="middle"
-                dominantBaseline="middle"
-                className="chart-no-data-text"
-                fill="#666"
-              >
-                Ainda não há notas lançadas para gerar o gráfico.
-              </text>
             </PieChart>
           )}
         </ResponsiveContainer>
+
+        {!hasData && (
+          <div style={{
+            position: 'absolute',
+            top: 0, left: 0, right: 0, bottom: 0,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            pointerEvents: 'none'
+          }}>
+            <span style={{ 
+              background: 'rgba(255,255,255,0.8)', 
+              padding: '10px 20px', 
+              borderRadius: '4px',
+              color: '#666',
+              fontSize: '14px',
+              textAlign: 'center'
+            }}>
+              Ainda não há notas lançadas para gerar o gráfico.
+            </span>
+          </div>
+        )}
       </div>
     </div>
   );

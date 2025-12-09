@@ -103,24 +103,24 @@ const EvaluationBarChart: React.FC<EvaluationBarChartProps> = ({ data }) => {
   const hasAnyData = chartData.some(item => item.hasData);
 
   return (
-    <div className="chart-container" style={{ position: 'relative' }}>
+    <div className="chart-container">
       <h4>Evaluation Performance</h4>
       <div className="chart-wrapper">
-        <ResponsiveContainer width="100%" height={350}>
+        <ResponsiveContainer width="100%" height="100%">
           <BarChart
             data={chartData.length > 0 ? chartData : [{ goal: '', averageGrade: 0, hasData: false }]}
-            margin={{ top: 20, right: 20, left: 20, bottom: 60 }}
+            margin={{ top: 60, right: 30, left: 25, bottom: 15 }}
           >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis 
               dataKey="goal" 
               tick={(props: any) => <CustomXAxisTick {...props} chartData={chartData} />}
               interval={0}
-              height={60}
+              height={70}
             />
             <YAxis 
               domain={[0, MAX_GRADE]} 
-              label={{ value: 'Average Grade', angle: -90, position: 'insideLeft' }}
+              label={{ value: 'Average Grade', angle: -90, position: 'insideLeft', offset: 10, style: { textAnchor: 'middle' } }}
             />
             <Tooltip content={<CustomTooltip />} cursor={{ fill: 'transparent' }} />
             <Bar dataKey="averageGrade" name="Average Grade">
@@ -137,7 +137,7 @@ const EvaluationBarChart: React.FC<EvaluationBarChartProps> = ({ data }) => {
         {!hasAnyData && (
           <div style={{
             position: 'absolute',
-            top: 0, left: 0, right: 0, bottom: 60,
+            top: 0, left: 0, right: 0, bottom: 0,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
