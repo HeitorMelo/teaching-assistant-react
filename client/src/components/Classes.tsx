@@ -5,6 +5,8 @@ import { Report } from '../types/Report';
 import ClassService, { fetchClassReportsForComparison } from '../services/ClassService';
 import { studentService } from '../services/StudentService';
 import EnrollmentService from '../services/EnrollmentService';
+import { DEFAULT_ESPECIFICACAO_DO_CALCULO_DE_MEDIA, EspecificacaoDoCalculoDaMedia } from '../types/EspecificacaoDoCalculoDaMedia';
+import ClassReport from './ClassReport';
 import ComparisonCharts from './ComparisonCharts';
 
 interface ClassesProps {
@@ -18,7 +20,8 @@ interface ClassesProps {
 const DEFAULT_FORM_DATA: CreateClassRequest = {
   topic: '',
   semester: 1,
-  year: new Date().getFullYear()
+  year: new Date().getFullYear(),
+  especificacaoDoCalculoDaMedia: DEFAULT_ESPECIFICACAO_DO_CALCULO_DE_MEDIA
 };
 
 const MAX_COMPARISON_SELECTION = 6;
@@ -40,7 +43,7 @@ const Classes: React.FC<ClassesProps> = ({
   const [selectedStudentsForEnrollment, setSelectedStudentsForEnrollment] = useState<Set<string>>(new Set());
   const [isEnrolling, setIsEnrolling] = useState(false);
 
-  // Report state
+  // Report state - only track which class to show report for
   const [reportPanelClass, setReportPanelClass] = useState<Class | null>(null);
   const [reportData, setReportData] = useState<Report | null>(null);
   const [isLoadingReport, setIsLoadingReport] = useState(false);
@@ -150,7 +153,7 @@ const Classes: React.FC<ClassesProps> = ({
   };
 
   // Handle opening report panel for a specific class
-  const handleOpenReportPanel = async (classObj: Class) => {
+  const handleOpenReportPanel = (classObj: Class) => {
     setReportPanelClass(classObj);
     setIsLoadingReport(true);
     
@@ -715,112 +718,11 @@ const Classes: React.FC<ClassesProps> = ({
 
       {/* Report Panel */}
       {reportPanelClass && (
-        <div className="enrollment-overlay">
-          <div className="report-modal">
-            <div className="enrollment-modal-header">
-              <h3>Class Report: {reportPanelClass.topic} ({reportPanelClass.year}/{reportPanelClass.semester})</h3>
-              <button 
-                className="close-modal-btn"
-                onClick={handleCloseReportPanel}
-                title="Close"
-              >
-                ×
-              </button>
-            </div>
-
-            <div className="report-modal-content">
-              {isLoadingReport ? (
-                <div className="loading-report">
-                  <p>Loading report...</p>
-                </div>
-              ) : reportData ? (
-                <>
-                  {/* Report Statistics - Two Columns */}
-                  <div className="report-stats-grid">
-                    <div className="report-stat-card">
-                      <h4>Enrollment Statistics</h4>
-                      <div className="stat-item">
-                        <span className="stat-label">Total Enrolled:</span>
-                        <span className="stat-value">{reportData.totalEnrolled}</span>
-                      </div>
-                      <div className="stat-item">
-                        <span className="stat-label">Class Average:</span>
-                        <span className="stat-value">{reportData.studentsAverage.toFixed(2)}</span>
-                      </div>
-                    </div>
-
-                    <div className="report-stat-card">
-                      <h4>Approval Statistics</h4>
-                      <div className="stat-item">
-                        <span className="stat-label">Approved:</span>
-                        <span className="stat-value approved">{reportData.approvedCount}</span>
-                      </div>
-                      <div className="stat-item">
-                        <span className="stat-label">Not Approved:</span>
-                        <span className="stat-value not-approved">{reportData.notApprovedCount}</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Evaluation Performance Table */}
-                  <div className="evaluation-performance">
-                    <h4>Evaluation Performance</h4>
-                    {reportData.evaluationPerformance.length === 0 ? (
-                      <p className="no-evaluations">No evaluations recorded yet</p>
-                    ) : (
-                      <div className="table-container">
-                        <table className="performance-table">
-                          <thead>
-                            <tr>
-                              <th>Goal</th>
-                              <th>Average Grade</th>
-                              <th>Evaluated Students</th>
-                              <th>MA</th>
-                              <th>MPA</th>
-                              <th>MANA</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {reportData.evaluationPerformance.map((performance) => (
-                              <tr key={performance.goal}>
-                                <td><strong>{performance.goal}</strong></td>
-                                <td>{performance.averageGrade.toFixed(2)}</td>
-                                <td>{performance.evaluatedStudents}</td>
-                                <td className="grade-ma">{performance.gradeDistribution.MA}</td>
-                                <td className="grade-mpa">{performance.gradeDistribution.MPA}</td>
-                                <td className="grade-mana">{performance.gradeDistribution.MANA}</td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Report Generated Timestamp */}
-                  <div className="report-footer">
-                    <p className="report-timestamp">
-                      Report generated at: {new Date(reportData.generatedAt).toLocaleString()}
-                    </p>
-                  </div>
-                </>
-              ) : (
-                <div className="no-report-data">
-                  <p>No report data available</p>
-                </div>
-              )}
-            </div>
-
-            <div className="report-actions">
-              <button 
-                className="cancel-btn"
-                onClick={handleCloseReportPanel}
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
+        <ClassReport
+          classObj={reportPanelClass}
+          onClose={handleCloseReportPanel}
+          onError={onError}
+        />
       )}
 
       {/* Comparison View Modal */}

@@ -1,5 +1,5 @@
 import { Class } from '../types/Class';
-import { Report } from '../types/Report';
+import { ReportData } from '../types/Report';
 
 const API_BASE_URL = 'http://localhost:3005';
 
@@ -80,7 +80,7 @@ class ClassService {
     }
   }
 
-  static async getClassReport(classId: string): Promise<Report> {
+  static async getClassReport(classId: string): Promise<ReportData> {
     try {
       const response = await fetch(`${API_BASE_URL}/api/classes/${classId}/report`);
       
@@ -95,6 +95,7 @@ class ClassService {
       throw error;
     }
   }
+
 }
 
 // Utility: Fetch multiple class reports and handle errors for comparison scenarios
