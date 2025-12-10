@@ -52,3 +52,9 @@ tmp_data/
 
 # Notes
 notes/
+
+# Extra (local documentation files)
+commit_log.txt
+demo.csv
+diff_log.txt
+FEATURE_SUMMARY.md
