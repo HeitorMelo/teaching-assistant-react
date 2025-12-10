@@ -79,3 +79,23 @@ Feature: Report Dashboard - E2E GUI Tests
     And approved students should have a green indicator
     And failed students should have a red indicator
     And pending students should have an orange indicator
+
+  # ===========================================================================
+  # TEST 6: Pie Chart Data Verification via SVG DOM Inspection
+  # ===========================================================================
+  @chart-data @pie-chart
+  Scenario: Pie Chart renders correct data segments
+    Given I am viewing the report for a class with "1 Approved" and "1 Failed" student
+    When I look at the "Student Status Distribution" pie chart
+    Then I should see exactly 2 distinct segments in the chart SVG
+    And the legend should display "Approved" and "Failed"
+
+  # ===========================================================================
+  # TEST 7: Bar Chart Data Verification via Performance Table
+  # ===========================================================================
+  @chart-data @bar-chart
+  Scenario: Bar Chart data is correctly reflected in the performance table
+    Given I am viewing the report for a class where goal "Tests" has average "10.0"
+    When I look at the "Evaluation Performance" section
+    Then the performance table should show goal "Tests" with average "10.00"
+    And the bar chart should render with at least 1 data point

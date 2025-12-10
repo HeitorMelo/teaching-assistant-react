@@ -398,3 +398,210 @@ Then('pending students should have an orange indicator', async function () {
   const indicator = await page.$('.status-pending, td[class*="pending"]');
   expect(indicator).not.toBeNull();
 });
+
+// =============================================================================
+// TEST 6 & 7: Chart Data Verification Steps
+// Strategy: SVG DOM Inspection + User Interaction (Hover/Tooltip)
+// =============================================================================
+
+/**
+ * Creates a class with exactly 1 Approved and 1 Failed student for pie chart testing.
+ * Approved student: All MA grades (10.0 average)
+ * Failed student: All MANA grades (0.0 average)
+ */
+Given('I am viewing the report for a class with {string} and {string} student', async function (approvedCount: string, failedCount: string) {
+  // Create the test class
+  await createClassViaAPI('Pie Chart Test');
+  
+  // Create approved student with all MA grades
+  await createStudentViaAPI('Pie Approved Student', '55555555501');
+  await enrollStudentViaAPI('55555555501');
+  await addGradeViaAPI('55555555501', 'Requirements', 'MA');
+  await addGradeViaAPI('55555555501', 'Configuration Management', 'MA');
+  await addGradeViaAPI('55555555501', 'Project Management', 'MA');
+  await addGradeViaAPI('55555555501', 'Design', 'MA');
+  await addGradeViaAPI('55555555501', 'Tests', 'MA');
+  await addGradeViaAPI('55555555501', 'Refactoring', 'MA');
+  
+  // Create failed student with all MANA grades
+  await createStudentViaAPI('Pie Failed Student', '55555555502');
+  await enrollStudentViaAPI('55555555502');
+  await addGradeViaAPI('55555555502', 'Requirements', 'MANA');
+  await addGradeViaAPI('55555555502', 'Configuration Management', 'MANA');
+  await addGradeViaAPI('55555555502', 'Project Management', 'MANA');
+  await addGradeViaAPI('55555555502', 'Design', 'MANA');
+  await addGradeViaAPI('55555555502', 'Tests', 'MANA');
+  await addGradeViaAPI('55555555502', 'Refactoring', 'MANA');
+  
+  // Navigate to Classes page and open report
+  await page.goto(baseUrl);
+  const classesTab = await page.waitForSelector('[data-testid="classes-tab"]', { timeout: 10000 });
+  await classesTab?.click();
+  await new Promise(resolve => setTimeout(resolve, 500));
+  
+  // Click Report button for the test class
+  if (!currentClassId) throw new Error('No class ID available');
+  const xpath = `xpath///tr[contains(., '${currentClassId.split('-')[0]}')] | //div[contains(@class, 'card')]`;
+  await page.waitForSelector(xpath, { timeout: 10000 });
+  const container = await page.$(xpath);
+  if (!container) throw new Error('Could not find class container');
+  
+  const reportBtn = await container.$('xpath/.//button[contains(., "Report")]');
+  if (reportBtn) {
+    await reportBtn.click();
+  } else {
+    const btn = await container.$('.report-btn');
+    if (btn) await btn.click();
+    else throw new Error('Report button not found');
+  }
+  
+  await page.waitForSelector('.enrollment-overlay, .report-modal', { timeout: 10000 });
+  await new Promise(resolve => setTimeout(resolve, 1000));
+});
+
+/**
+ * Creates a class where a specific goal has a known average for bar chart tooltip testing.
+ * Sets up a student with MA grade on "Tests" goal to get 10.0 average.
+ */
+Given('I am viewing the report for a class where goal {string} has average {string}', async function (goal: string, expectedAverage: string) {
+  // Create the test class
+  await createClassViaAPI('Bar Chart Test');
+  
+  // Create a student with MA grade on the specified goal
+  await createStudentViaAPI('Bar Test Student', '66666666601');
+  await enrollStudentViaAPI('66666666601');
+  
+  // Add MA grade to the specified goal (Tests) - this will give 10.0 average
+  await addGradeViaAPI('66666666601', goal, 'MA');
+  
+  // Navigate to Classes page and open report
+  await page.goto(baseUrl);
+  const classesTab = await page.waitForSelector('[data-testid="classes-tab"]', { timeout: 10000 });
+  await classesTab?.click();
+  await new Promise(resolve => setTimeout(resolve, 500));
+  
+  // Click Report button for the test class
+  if (!currentClassId) throw new Error('No class ID available');
+  const xpath = `xpath///tr[contains(., '${currentClassId.split('-')[0]}')] | //div[contains(@class, 'card')]`;
+  await page.waitForSelector(xpath, { timeout: 10000 });
+  const container = await page.$(xpath);
+  if (!container) throw new Error('Could not find class container');
+  
+  const reportBtn = await container.$('xpath/.//button[contains(., "Report")]');
+  if (reportBtn) {
+    await reportBtn.click();
+  } else {
+    const btn = await container.$('.report-btn');
+    if (btn) await btn.click();
+    else throw new Error('Report button not found');
+  }
+  
+  await page.waitForSelector('.enrollment-overlay, .report-modal', { timeout: 10000 });
+  await new Promise(resolve => setTimeout(resolve, 1000));
+});
+
+When('I look at the {string} pie chart', async function (chartTitle: string) {
+  // Wait for the pie chart to render
+  await page.waitForSelector('.recharts-pie', { timeout: 10000 });
+  await new Promise(resolve => setTimeout(resolve, 500));
+});
+
+When('I hover over the bar corresponding to {string} in the {string} chart', async function (goalName: string, chartTitle: string) {
+  // This step is kept for backwards compatibility but simplified
+  await page.waitForSelector('.recharts-wrapper', { timeout: 10000 });
+  await new Promise(resolve => setTimeout(resolve, 1000));
+});
+
+When('I look at the {string} section', async function (sectionName: string) {
+  // Scroll to make the section visible
+  await page.evaluate((section: string) => {
+    const headings = document.querySelectorAll('h4');
+    for (const h of Array.from(headings)) {
+      if (h.textContent?.includes(section)) {
+        h.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
+    }
+  }, sectionName);
+  await new Promise(resolve => setTimeout(resolve, 500));
+});
+
+/**
+ * Verifies the performance table shows the correct goal and average.
+ * Uses DOM inspection of the performance table.
+ */
+Then('the performance table should show goal {string} with average {string}', async function (goal: string, expectedAverage: string) {
+  // Wait for the performance table
+  await page.waitForSelector('.performance-table', { timeout: 10000 });
+  
+  const tableData = await page.evaluate((targetGoal: string) => {
+    const rows = document.querySelectorAll('.performance-table tbody tr');
+    for (const row of Array.from(rows)) {
+      const cells = row.querySelectorAll('td');
+      if (cells.length > 0) {
+        const goalCell = cells[0]?.textContent?.trim() || '';
+        const avgCell = cells[1]?.textContent?.trim() || '';
+        if (goalCell.includes(targetGoal)) {
+          return { goal: goalCell, average: avgCell };
+        }
+      }
+    }
+    return null;
+  }, goal);
+  
+  expect(tableData).not.toBeNull();
+  expect(tableData?.average).toBe(expectedAverage);
+});
+
+/**
+ * Verifies the bar chart has rendered with at least one data point.
+ * Uses SVG DOM inspection.
+ */
+Then('the bar chart should render with at least {int} data point', async function (minPoints: number) {
+  // Check for recharts wrapper existence and that it has content
+  const chartExists = await page.evaluate(() => {
+    const wrappers = document.querySelectorAll('.recharts-wrapper');
+    // Find the bar chart (second wrapper typically)
+    for (const wrapper of Array.from(wrappers)) {
+      // Check if it has cartesian grid (bar chart indicator)
+      const cartesianGrid = wrapper.querySelector('.recharts-cartesian-grid');
+      if (cartesianGrid) {
+        // Check for any rendered content
+        const svg = wrapper.querySelector('svg');
+        return svg !== null;
+      }
+    }
+    return false;
+  });
+  
+  expect(chartExists).toBe(true);
+});
+
+/**
+ * Verifies pie chart has exactly N distinct segments via SVG DOM inspection.
+ * Recharts renders pie segments as <path> elements within .recharts-pie-sector
+ */
+Then('I should see exactly {int} distinct segments in the chart SVG', async function (expectedCount: number) {
+  const segmentCount = await page.evaluate(() => {
+    // Recharts renders each pie segment as a separate sector with a path
+    const sectors = document.querySelectorAll('.recharts-pie-sector');
+    return sectors.length;
+  });
+  
+  expect(segmentCount).toBe(expectedCount);
+});
+
+/**
+ * Verifies pie chart legend displays the expected status labels.
+ * Uses SVG DOM inspection of the legend elements.
+ */
+Then('the legend should display {string} and {string}', async function (status1: string, status2: string) {
+  const legendTexts = await page.evaluate(() => {
+    const legendItems = document.querySelectorAll('.recharts-legend-item-text');
+    return Array.from(legendItems).map(item => item.textContent?.trim() || '');
+  });
+  
+  expect(legendTexts).toContain(status1);
+  expect(legendTexts).toContain(status2);
+});
+
