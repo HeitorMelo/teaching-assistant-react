@@ -1,10 +1,3 @@
-/**
- * Shared Browser State
- * 
- * This module provides a single browser and page instance shared across all step definitions.
- * Only one browser window will open during test execution.
- */
-
 import { Browser, Page, launch } from 'puppeteer';
 import { AfterAll } from '@cucumber/cucumber';
 
@@ -31,14 +24,6 @@ export async function getPage(): Promise<Page> {
   return page;
 }
 
-export function getCurrentPage(): Page | null {
-  return page;
-}
-
-export function getCurrentBrowser(): Browser | null {
-  return browser;
-}
-
 export async function closeBrowser(): Promise<void> {
   if (browser) {
     await browser.close();
@@ -47,7 +32,6 @@ export async function closeBrowser(): Promise<void> {
   }
 }
 
-// Close browser after ALL tests complete
 AfterAll(async function () {
   await closeBrowser();
 });

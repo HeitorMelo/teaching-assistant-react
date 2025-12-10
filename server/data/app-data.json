@@ -21,21 +21,6 @@
       "email": "jr@gmail.com"
     },
     {
-      "name": "Maria",
-      "cpf": "11122233344",
-      "email": "Maria@test.com"
-    },
-    {
-      "name": "John",
-      "cpf": "22233344455",
-      "email": "John@test.com"
-    },
-    {
-      "name": "Ana",
-      "cpf": "33344455566",
-      "email": "Ana@test.com"
-    },
-    {
       "name": "Green Student",
       "cpf": "33333333301",
       "email": "green.student@test.com"
@@ -314,55 +299,6 @@
         }
       },
       "enrollments": []
-    },
-    {
-      "topic": "Math",
-      "semester": 1,
-      "year": 2024,
-      "especificacaoDoCalculoDaMedia": {
-        "pesosDosConceitos": {
-          "MA": 10,
-          "MPA": 7,
-          "MANA": 0
-        },
-        "pesosDasMetas": {
-          "Requirements": 1,
-          "Configuration Management": 1,
-          "Project Management": 1,
-          "Design": 1,
-          "Tests": 1,
-          "Refactoring": 1
-        }
-      },
-      "enrollments": [
-        {
-          "studentCPF": "11122233344",
-          "evaluations": [
-            {
-              "goal": "Filter Test",
-              "grade": "MA"
-            }
-          ]
-        },
-        {
-          "studentCPF": "22233344455",
-          "evaluations": [
-            {
-              "goal": "Filter Test",
-              "grade": "MANA"
-            }
-          ]
-        },
-        {
-          "studentCPF": "33344455566",
-          "evaluations": [
-            {
-              "goal": "Filter Test",
-              "grade": "MPA"
-            }
-          ]
-        }
-      ]
     },
     {
       "topic": "Status Distribution Test Class",
@@ -781,6 +717,2796 @@
     },
     {
       "topic": "Mixed Status Test Class 1765353870142",
+      "semester": 1,
+      "year": 2025,
+      "especificacaoDoCalculoDaMedia": {
+        "pesosDosConceitos": {
+          "MA": 10,
+          "MPA": 7,
+          "MANA": 0
+        },
+        "pesosDasMetas": {
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
+        }
+      },
+      "enrollments": [
+        {
+          "studentCPF": "33333330001",
+          "evaluations": [
+            {
+              "goal": "Requirements",
+              "grade": "MA"
+            },
+            {
+              "goal": "Configuration Management",
+              "grade": "MA"
+            },
+            {
+              "goal": "Project Management",
+              "grade": "MA"
+            },
+            {
+              "goal": "Design",
+              "grade": "MA"
+            },
+            {
+              "goal": "Tests",
+              "grade": "MA"
+            },
+            {
+              "goal": "Refactoring",
+              "grade": "MA"
+            }
+          ]
+        },
+        {
+          "studentCPF": "33333330002",
+          "evaluations": [
+            {
+              "goal": "Requirements",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Configuration Management",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Project Management",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Design",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Tests",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Refactoring",
+              "grade": "MANA"
+            }
+          ]
+        },
+        {
+          "studentCPF": "33333330003",
+          "evaluations": []
+        }
+      ]
+    },
+    {
+      "topic": "E2E Test Class 1765354395636",
+      "semester": 1,
+      "year": 2025,
+      "especificacaoDoCalculoDaMedia": {
+        "pesosDosConceitos": {
+          "MA": 10,
+          "MPA": 7,
+          "MANA": 0
+        },
+        "pesosDasMetas": {
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
+        }
+      },
+      "enrollments": [
+        {
+          "studentCPF": "11111110001",
+          "evaluations": []
+        },
+        {
+          "studentCPF": "11111110002",
+          "evaluations": []
+        },
+        {
+          "studentCPF": "11111110003",
+          "evaluations": []
+        },
+        {
+          "studentCPF": "11111110004",
+          "evaluations": []
+        },
+        {
+          "studentCPF": "11111110005",
+          "evaluations": []
+        }
+      ]
+    },
+    {
+      "topic": "No Evaluations Test Class 1765354401495",
+      "semester": 1,
+      "year": 2025,
+      "especificacaoDoCalculoDaMedia": {
+        "pesosDosConceitos": {
+          "MA": 10,
+          "MPA": 7,
+          "MANA": 0
+        },
+        "pesosDasMetas": {
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
+        }
+      },
+      "enrollments": [
+        {
+          "studentCPF": "44444444401",
+          "evaluations": []
+        }
+      ]
+    },
+    {
+      "topic": "E2E Test Class 1765354418541",
+      "semester": 1,
+      "year": 2025,
+      "especificacaoDoCalculoDaMedia": {
+        "pesosDosConceitos": {
+          "MA": 10,
+          "MPA": 7,
+          "MANA": 0
+        },
+        "pesosDasMetas": {
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
+        }
+      },
+      "enrollments": []
+    },
+    {
+      "topic": "Status Distribution Test Class 1765354423496",
+      "semester": 1,
+      "year": 2025,
+      "especificacaoDoCalculoDaMedia": {
+        "pesosDosConceitos": {
+          "MA": 10,
+          "MPA": 7,
+          "MANA": 0
+        },
+        "pesosDasMetas": {
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
+        }
+      },
+      "enrollments": [
+        {
+          "studentCPF": "55555550001",
+          "evaluations": [
+            {
+              "goal": "Requirements",
+              "grade": "MA"
+            },
+            {
+              "goal": "Configuration Management",
+              "grade": "MA"
+            },
+            {
+              "goal": "Project Management",
+              "grade": "MA"
+            },
+            {
+              "goal": "Design",
+              "grade": "MA"
+            },
+            {
+              "goal": "Tests",
+              "grade": "MA"
+            },
+            {
+              "goal": "Refactoring",
+              "grade": "MA"
+            }
+          ]
+        },
+        {
+          "studentCPF": "55555550002",
+          "evaluations": [
+            {
+              "goal": "Requirements",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Configuration Management",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Project Management",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Design",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Tests",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Refactoring",
+              "grade": "MANA"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "topic": "Bar Chart Test Class 1765354432248",
+      "semester": 1,
+      "year": 2025,
+      "especificacaoDoCalculoDaMedia": {
+        "pesosDosConceitos": {
+          "MA": 10,
+          "MPA": 7,
+          "MANA": 0
+        },
+        "pesosDasMetas": {
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
+        }
+      },
+      "enrollments": [
+        {
+          "studentCPF": "66666660001",
+          "evaluations": [
+            {
+              "goal": "Tests",
+              "grade": "MA"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "topic": "Students Test Class 1765354440301",
+      "semester": 1,
+      "year": 2025,
+      "especificacaoDoCalculoDaMedia": {
+        "pesosDosConceitos": {
+          "MA": 10,
+          "MPA": 7,
+          "MANA": 0
+        },
+        "pesosDasMetas": {
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
+        }
+      },
+      "enrollments": [
+        {
+          "studentCPF": "77777770001",
+          "evaluations": []
+        }
+      ]
+    },
+    {
+      "topic": "Mixed Status Test Class 1765354446614",
+      "semester": 1,
+      "year": 2025,
+      "especificacaoDoCalculoDaMedia": {
+        "pesosDosConceitos": {
+          "MA": 10,
+          "MPA": 7,
+          "MANA": 0
+        },
+        "pesosDasMetas": {
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
+        }
+      },
+      "enrollments": [
+        {
+          "studentCPF": "33333330001",
+          "evaluations": [
+            {
+              "goal": "Requirements",
+              "grade": "MA"
+            },
+            {
+              "goal": "Configuration Management",
+              "grade": "MA"
+            },
+            {
+              "goal": "Project Management",
+              "grade": "MA"
+            },
+            {
+              "goal": "Design",
+              "grade": "MA"
+            },
+            {
+              "goal": "Tests",
+              "grade": "MA"
+            },
+            {
+              "goal": "Refactoring",
+              "grade": "MA"
+            }
+          ]
+        },
+        {
+          "studentCPF": "33333330002",
+          "evaluations": [
+            {
+              "goal": "Requirements",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Configuration Management",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Project Management",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Design",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Tests",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Refactoring",
+              "grade": "MANA"
+            }
+          ]
+        },
+        {
+          "studentCPF": "33333330003",
+          "evaluations": []
+        }
+      ]
+    },
+    {
+      "topic": "E2E Test Class 1765354545451",
+      "semester": 1,
+      "year": 2025,
+      "especificacaoDoCalculoDaMedia": {
+        "pesosDosConceitos": {
+          "MA": 10,
+          "MPA": 7,
+          "MANA": 0
+        },
+        "pesosDasMetas": {
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
+        }
+      },
+      "enrollments": [
+        {
+          "studentCPF": "11111110001",
+          "evaluations": []
+        },
+        {
+          "studentCPF": "11111110002",
+          "evaluations": []
+        },
+        {
+          "studentCPF": "11111110003",
+          "evaluations": []
+        },
+        {
+          "studentCPF": "11111110004",
+          "evaluations": []
+        },
+        {
+          "studentCPF": "11111110005",
+          "evaluations": []
+        }
+      ]
+    },
+    {
+      "topic": "No Evaluations Test Class 1765354551297",
+      "semester": 1,
+      "year": 2025,
+      "especificacaoDoCalculoDaMedia": {
+        "pesosDosConceitos": {
+          "MA": 10,
+          "MPA": 7,
+          "MANA": 0
+        },
+        "pesosDasMetas": {
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
+        }
+      },
+      "enrollments": [
+        {
+          "studentCPF": "44444444401",
+          "evaluations": []
+        }
+      ]
+    },
+    {
+      "topic": "E2E Test Class 1765354572079",
+      "semester": 1,
+      "year": 2025,
+      "especificacaoDoCalculoDaMedia": {
+        "pesosDosConceitos": {
+          "MA": 10,
+          "MPA": 7,
+          "MANA": 0
+        },
+        "pesosDasMetas": {
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
+        }
+      },
+      "enrollments": []
+    },
+    {
+      "topic": "Status Distribution Test Class 1765354577088",
+      "semester": 1,
+      "year": 2025,
+      "especificacaoDoCalculoDaMedia": {
+        "pesosDosConceitos": {
+          "MA": 10,
+          "MPA": 7,
+          "MANA": 0
+        },
+        "pesosDasMetas": {
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
+        }
+      },
+      "enrollments": [
+        {
+          "studentCPF": "55555550001",
+          "evaluations": [
+            {
+              "goal": "Requirements",
+              "grade": "MA"
+            },
+            {
+              "goal": "Configuration Management",
+              "grade": "MA"
+            },
+            {
+              "goal": "Project Management",
+              "grade": "MA"
+            },
+            {
+              "goal": "Design",
+              "grade": "MA"
+            },
+            {
+              "goal": "Tests",
+              "grade": "MA"
+            },
+            {
+              "goal": "Refactoring",
+              "grade": "MA"
+            }
+          ]
+        },
+        {
+          "studentCPF": "55555550002",
+          "evaluations": [
+            {
+              "goal": "Requirements",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Configuration Management",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Project Management",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Design",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Tests",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Refactoring",
+              "grade": "MANA"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "topic": "Bar Chart Test Class 1765354585858",
+      "semester": 1,
+      "year": 2025,
+      "especificacaoDoCalculoDaMedia": {
+        "pesosDosConceitos": {
+          "MA": 10,
+          "MPA": 7,
+          "MANA": 0
+        },
+        "pesosDasMetas": {
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
+        }
+      },
+      "enrollments": [
+        {
+          "studentCPF": "66666660001",
+          "evaluations": [
+            {
+              "goal": "Tests",
+              "grade": "MA"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "topic": "Students Test Class 1765354593999",
+      "semester": 1,
+      "year": 2025,
+      "especificacaoDoCalculoDaMedia": {
+        "pesosDosConceitos": {
+          "MA": 10,
+          "MPA": 7,
+          "MANA": 0
+        },
+        "pesosDasMetas": {
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
+        }
+      },
+      "enrollments": [
+        {
+          "studentCPF": "77777770001",
+          "evaluations": []
+        }
+      ]
+    },
+    {
+      "topic": "Mixed Status Test Class 1765354600333",
+      "semester": 1,
+      "year": 2025,
+      "especificacaoDoCalculoDaMedia": {
+        "pesosDosConceitos": {
+          "MA": 10,
+          "MPA": 7,
+          "MANA": 0
+        },
+        "pesosDasMetas": {
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
+        }
+      },
+      "enrollments": [
+        {
+          "studentCPF": "33333330001",
+          "evaluations": [
+            {
+              "goal": "Requirements",
+              "grade": "MA"
+            },
+            {
+              "goal": "Configuration Management",
+              "grade": "MA"
+            },
+            {
+              "goal": "Project Management",
+              "grade": "MA"
+            },
+            {
+              "goal": "Design",
+              "grade": "MA"
+            },
+            {
+              "goal": "Tests",
+              "grade": "MA"
+            },
+            {
+              "goal": "Refactoring",
+              "grade": "MA"
+            }
+          ]
+        },
+        {
+          "studentCPF": "33333330002",
+          "evaluations": [
+            {
+              "goal": "Requirements",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Configuration Management",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Project Management",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Design",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Tests",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Refactoring",
+              "grade": "MANA"
+            }
+          ]
+        },
+        {
+          "studentCPF": "33333330003",
+          "evaluations": []
+        }
+      ]
+    },
+    {
+      "topic": "E2E Test Class 1765354640040",
+      "semester": 1,
+      "year": 2025,
+      "especificacaoDoCalculoDaMedia": {
+        "pesosDosConceitos": {
+          "MA": 10,
+          "MPA": 7,
+          "MANA": 0
+        },
+        "pesosDasMetas": {
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
+        }
+      },
+      "enrollments": [
+        {
+          "studentCPF": "11111110001",
+          "evaluations": []
+        },
+        {
+          "studentCPF": "11111110002",
+          "evaluations": []
+        },
+        {
+          "studentCPF": "11111110003",
+          "evaluations": []
+        },
+        {
+          "studentCPF": "11111110004",
+          "evaluations": []
+        },
+        {
+          "studentCPF": "11111110005",
+          "evaluations": []
+        }
+      ]
+    },
+    {
+      "topic": "No Evaluations Test Class 1765354645863",
+      "semester": 1,
+      "year": 2025,
+      "especificacaoDoCalculoDaMedia": {
+        "pesosDosConceitos": {
+          "MA": 10,
+          "MPA": 7,
+          "MANA": 0
+        },
+        "pesosDasMetas": {
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
+        }
+      },
+      "enrollments": [
+        {
+          "studentCPF": "44444444401",
+          "evaluations": []
+        }
+      ]
+    },
+    {
+      "topic": "E2E Test Class 1765354670574",
+      "semester": 1,
+      "year": 2025,
+      "especificacaoDoCalculoDaMedia": {
+        "pesosDosConceitos": {
+          "MA": 10,
+          "MPA": 7,
+          "MANA": 0
+        },
+        "pesosDasMetas": {
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
+        }
+      },
+      "enrollments": []
+    },
+    {
+      "topic": "Status Distribution Test Class 1765354675546",
+      "semester": 1,
+      "year": 2025,
+      "especificacaoDoCalculoDaMedia": {
+        "pesosDosConceitos": {
+          "MA": 10,
+          "MPA": 7,
+          "MANA": 0
+        },
+        "pesosDasMetas": {
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
+        }
+      },
+      "enrollments": [
+        {
+          "studentCPF": "55555550001",
+          "evaluations": [
+            {
+              "goal": "Requirements",
+              "grade": "MA"
+            },
+            {
+              "goal": "Configuration Management",
+              "grade": "MA"
+            },
+            {
+              "goal": "Project Management",
+              "grade": "MA"
+            },
+            {
+              "goal": "Design",
+              "grade": "MA"
+            },
+            {
+              "goal": "Tests",
+              "grade": "MA"
+            },
+            {
+              "goal": "Refactoring",
+              "grade": "MA"
+            }
+          ]
+        },
+        {
+          "studentCPF": "55555550002",
+          "evaluations": [
+            {
+              "goal": "Requirements",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Configuration Management",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Project Management",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Design",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Tests",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Refactoring",
+              "grade": "MANA"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "topic": "Bar Chart Test Class 1765354684310",
+      "semester": 1,
+      "year": 2025,
+      "especificacaoDoCalculoDaMedia": {
+        "pesosDosConceitos": {
+          "MA": 10,
+          "MPA": 7,
+          "MANA": 0
+        },
+        "pesosDasMetas": {
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
+        }
+      },
+      "enrollments": [
+        {
+          "studentCPF": "66666660001",
+          "evaluations": [
+            {
+              "goal": "Tests",
+              "grade": "MA"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "topic": "Students Test Class 1765354692464",
+      "semester": 1,
+      "year": 2025,
+      "especificacaoDoCalculoDaMedia": {
+        "pesosDosConceitos": {
+          "MA": 10,
+          "MPA": 7,
+          "MANA": 0
+        },
+        "pesosDasMetas": {
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
+        }
+      },
+      "enrollments": [
+        {
+          "studentCPF": "77777770001",
+          "evaluations": []
+        }
+      ]
+    },
+    {
+      "topic": "Mixed Status Test Class 1765354698828",
+      "semester": 1,
+      "year": 2025,
+      "especificacaoDoCalculoDaMedia": {
+        "pesosDosConceitos": {
+          "MA": 10,
+          "MPA": 7,
+          "MANA": 0
+        },
+        "pesosDasMetas": {
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
+        }
+      },
+      "enrollments": [
+        {
+          "studentCPF": "33333330001",
+          "evaluations": [
+            {
+              "goal": "Requirements",
+              "grade": "MA"
+            },
+            {
+              "goal": "Configuration Management",
+              "grade": "MA"
+            },
+            {
+              "goal": "Project Management",
+              "grade": "MA"
+            },
+            {
+              "goal": "Design",
+              "grade": "MA"
+            },
+            {
+              "goal": "Tests",
+              "grade": "MA"
+            },
+            {
+              "goal": "Refactoring",
+              "grade": "MA"
+            }
+          ]
+        },
+        {
+          "studentCPF": "33333330002",
+          "evaluations": [
+            {
+              "goal": "Requirements",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Configuration Management",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Project Management",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Design",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Tests",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Refactoring",
+              "grade": "MANA"
+            }
+          ]
+        },
+        {
+          "studentCPF": "33333330003",
+          "evaluations": []
+        }
+      ]
+    },
+    {
+      "topic": "E2E Test Class 1765354813366",
+      "semester": 1,
+      "year": 2025,
+      "especificacaoDoCalculoDaMedia": {
+        "pesosDosConceitos": {
+          "MA": 10,
+          "MPA": 7,
+          "MANA": 0
+        },
+        "pesosDasMetas": {
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
+        }
+      },
+      "enrollments": [
+        {
+          "studentCPF": "11111110001",
+          "evaluations": []
+        },
+        {
+          "studentCPF": "11111110002",
+          "evaluations": []
+        },
+        {
+          "studentCPF": "11111110003",
+          "evaluations": []
+        },
+        {
+          "studentCPF": "11111110004",
+          "evaluations": []
+        },
+        {
+          "studentCPF": "11111110005",
+          "evaluations": []
+        }
+      ]
+    },
+    {
+      "topic": "No Evaluations Test Class 1765354819161",
+      "semester": 1,
+      "year": 2025,
+      "especificacaoDoCalculoDaMedia": {
+        "pesosDosConceitos": {
+          "MA": 10,
+          "MPA": 7,
+          "MANA": 0
+        },
+        "pesosDasMetas": {
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
+        }
+      },
+      "enrollments": [
+        {
+          "studentCPF": "44444444401",
+          "evaluations": []
+        }
+      ]
+    },
+    {
+      "topic": "E2E Test Class 1765354847213",
+      "semester": 1,
+      "year": 2025,
+      "especificacaoDoCalculoDaMedia": {
+        "pesosDosConceitos": {
+          "MA": 10,
+          "MPA": 7,
+          "MANA": 0
+        },
+        "pesosDasMetas": {
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
+        }
+      },
+      "enrollments": []
+    },
+    {
+      "topic": "Status Distribution Test Class 1765354852167",
+      "semester": 1,
+      "year": 2025,
+      "especificacaoDoCalculoDaMedia": {
+        "pesosDosConceitos": {
+          "MA": 10,
+          "MPA": 7,
+          "MANA": 0
+        },
+        "pesosDasMetas": {
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
+        }
+      },
+      "enrollments": [
+        {
+          "studentCPF": "55555550001",
+          "evaluations": [
+            {
+              "goal": "Requirements",
+              "grade": "MA"
+            },
+            {
+              "goal": "Configuration Management",
+              "grade": "MA"
+            },
+            {
+              "goal": "Project Management",
+              "grade": "MA"
+            },
+            {
+              "goal": "Design",
+              "grade": "MA"
+            },
+            {
+              "goal": "Tests",
+              "grade": "MA"
+            },
+            {
+              "goal": "Refactoring",
+              "grade": "MA"
+            }
+          ]
+        },
+        {
+          "studentCPF": "55555550002",
+          "evaluations": [
+            {
+              "goal": "Requirements",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Configuration Management",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Project Management",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Design",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Tests",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Refactoring",
+              "grade": "MANA"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "topic": "Bar Chart Test Class 1765354860885",
+      "semester": 1,
+      "year": 2025,
+      "especificacaoDoCalculoDaMedia": {
+        "pesosDosConceitos": {
+          "MA": 10,
+          "MPA": 7,
+          "MANA": 0
+        },
+        "pesosDasMetas": {
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
+        }
+      },
+      "enrollments": [
+        {
+          "studentCPF": "66666660001",
+          "evaluations": [
+            {
+              "goal": "Tests",
+              "grade": "MA"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "topic": "Students Test Class 1765354868947",
+      "semester": 1,
+      "year": 2025,
+      "especificacaoDoCalculoDaMedia": {
+        "pesosDosConceitos": {
+          "MA": 10,
+          "MPA": 7,
+          "MANA": 0
+        },
+        "pesosDasMetas": {
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
+        }
+      },
+      "enrollments": [
+        {
+          "studentCPF": "77777770001",
+          "evaluations": []
+        }
+      ]
+    },
+    {
+      "topic": "Mixed Status Test Class 1765354875264",
+      "semester": 1,
+      "year": 2025,
+      "especificacaoDoCalculoDaMedia": {
+        "pesosDosConceitos": {
+          "MA": 10,
+          "MPA": 7,
+          "MANA": 0
+        },
+        "pesosDasMetas": {
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
+        }
+      },
+      "enrollments": [
+        {
+          "studentCPF": "33333330001",
+          "evaluations": [
+            {
+              "goal": "Requirements",
+              "grade": "MA"
+            },
+            {
+              "goal": "Configuration Management",
+              "grade": "MA"
+            },
+            {
+              "goal": "Project Management",
+              "grade": "MA"
+            },
+            {
+              "goal": "Design",
+              "grade": "MA"
+            },
+            {
+              "goal": "Tests",
+              "grade": "MA"
+            },
+            {
+              "goal": "Refactoring",
+              "grade": "MA"
+            }
+          ]
+        },
+        {
+          "studentCPF": "33333330002",
+          "evaluations": [
+            {
+              "goal": "Requirements",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Configuration Management",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Project Management",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Design",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Tests",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Refactoring",
+              "grade": "MANA"
+            }
+          ]
+        },
+        {
+          "studentCPF": "33333330003",
+          "evaluations": []
+        }
+      ]
+    },
+    {
+      "topic": "E2E Test Class 1765355193086",
+      "semester": 1,
+      "year": 2025,
+      "especificacaoDoCalculoDaMedia": {
+        "pesosDosConceitos": {
+          "MA": 10,
+          "MPA": 7,
+          "MANA": 0
+        },
+        "pesosDasMetas": {
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
+        }
+      },
+      "enrollments": [
+        {
+          "studentCPF": "11111110001",
+          "evaluations": []
+        },
+        {
+          "studentCPF": "11111110002",
+          "evaluations": []
+        },
+        {
+          "studentCPF": "11111110003",
+          "evaluations": []
+        },
+        {
+          "studentCPF": "11111110004",
+          "evaluations": []
+        },
+        {
+          "studentCPF": "11111110005",
+          "evaluations": []
+        }
+      ]
+    },
+    {
+      "topic": "No Evaluations Test Class 1765355199011",
+      "semester": 1,
+      "year": 2025,
+      "especificacaoDoCalculoDaMedia": {
+        "pesosDosConceitos": {
+          "MA": 10,
+          "MPA": 7,
+          "MANA": 0
+        },
+        "pesosDasMetas": {
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
+        }
+      },
+      "enrollments": [
+        {
+          "studentCPF": "44444444401",
+          "evaluations": []
+        }
+      ]
+    },
+    {
+      "topic": "E2E Test Class 1765355212617",
+      "semester": 1,
+      "year": 2025,
+      "especificacaoDoCalculoDaMedia": {
+        "pesosDosConceitos": {
+          "MA": 10,
+          "MPA": 7,
+          "MANA": 0
+        },
+        "pesosDasMetas": {
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
+        }
+      },
+      "enrollments": []
+    },
+    {
+      "topic": "Status Distribution Test Class 1765355226210",
+      "semester": 1,
+      "year": 2025,
+      "especificacaoDoCalculoDaMedia": {
+        "pesosDosConceitos": {
+          "MA": 10,
+          "MPA": 7,
+          "MANA": 0
+        },
+        "pesosDasMetas": {
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
+        }
+      },
+      "enrollments": [
+        {
+          "studentCPF": "55555550001",
+          "evaluations": [
+            {
+              "goal": "Requirements",
+              "grade": "MA"
+            },
+            {
+              "goal": "Configuration Management",
+              "grade": "MA"
+            },
+            {
+              "goal": "Project Management",
+              "grade": "MA"
+            },
+            {
+              "goal": "Design",
+              "grade": "MA"
+            },
+            {
+              "goal": "Tests",
+              "grade": "MA"
+            },
+            {
+              "goal": "Refactoring",
+              "grade": "MA"
+            }
+          ]
+        },
+        {
+          "studentCPF": "55555550002",
+          "evaluations": [
+            {
+              "goal": "Requirements",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Configuration Management",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Project Management",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Design",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Tests",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Refactoring",
+              "grade": "MANA"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "topic": "Bar Chart Test Class 1765355239816",
+      "semester": 1,
+      "year": 2025,
+      "especificacaoDoCalculoDaMedia": {
+        "pesosDosConceitos": {
+          "MA": 10,
+          "MPA": 7,
+          "MANA": 0
+        },
+        "pesosDasMetas": {
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
+        }
+      },
+      "enrollments": [
+        {
+          "studentCPF": "66666660001",
+          "evaluations": [
+            {
+              "goal": "Tests",
+              "grade": "MA"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "topic": "Students Test Class 1765355253441",
+      "semester": 1,
+      "year": 2025,
+      "especificacaoDoCalculoDaMedia": {
+        "pesosDosConceitos": {
+          "MA": 10,
+          "MPA": 7,
+          "MANA": 0
+        },
+        "pesosDasMetas": {
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
+        }
+      },
+      "enrollments": [
+        {
+          "studentCPF": "77777770001",
+          "evaluations": []
+        }
+      ]
+    },
+    {
+      "topic": "Mixed Status Test Class 1765355259914",
+      "semester": 1,
+      "year": 2025,
+      "especificacaoDoCalculoDaMedia": {
+        "pesosDosConceitos": {
+          "MA": 10,
+          "MPA": 7,
+          "MANA": 0
+        },
+        "pesosDasMetas": {
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
+        }
+      },
+      "enrollments": [
+        {
+          "studentCPF": "33333330001",
+          "evaluations": [
+            {
+              "goal": "Requirements",
+              "grade": "MA"
+            },
+            {
+              "goal": "Configuration Management",
+              "grade": "MA"
+            },
+            {
+              "goal": "Project Management",
+              "grade": "MA"
+            },
+            {
+              "goal": "Design",
+              "grade": "MA"
+            },
+            {
+              "goal": "Tests",
+              "grade": "MA"
+            },
+            {
+              "goal": "Refactoring",
+              "grade": "MA"
+            }
+          ]
+        },
+        {
+          "studentCPF": "33333330002",
+          "evaluations": [
+            {
+              "goal": "Requirements",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Configuration Management",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Project Management",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Design",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Tests",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Refactoring",
+              "grade": "MANA"
+            }
+          ]
+        },
+        {
+          "studentCPF": "33333330003",
+          "evaluations": []
+        }
+      ]
+    },
+    {
+      "topic": "E2E Test Class 1765355287023",
+      "semester": 1,
+      "year": 2025,
+      "especificacaoDoCalculoDaMedia": {
+        "pesosDosConceitos": {
+          "MA": 10,
+          "MPA": 7,
+          "MANA": 0
+        },
+        "pesosDasMetas": {
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
+        }
+      },
+      "enrollments": [
+        {
+          "studentCPF": "11111110001",
+          "evaluations": []
+        },
+        {
+          "studentCPF": "11111110002",
+          "evaluations": []
+        },
+        {
+          "studentCPF": "11111110003",
+          "evaluations": []
+        },
+        {
+          "studentCPF": "11111110004",
+          "evaluations": []
+        },
+        {
+          "studentCPF": "11111110005",
+          "evaluations": []
+        }
+      ]
+    },
+    {
+      "topic": "No Evaluations Test Class 1765355293036",
+      "semester": 1,
+      "year": 2025,
+      "especificacaoDoCalculoDaMedia": {
+        "pesosDosConceitos": {
+          "MA": 10,
+          "MPA": 7,
+          "MANA": 0
+        },
+        "pesosDasMetas": {
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
+        }
+      },
+      "enrollments": [
+        {
+          "studentCPF": "44444444401",
+          "evaluations": []
+        }
+      ]
+    },
+    {
+      "topic": "E2E Test Class 1765355328601",
+      "semester": 1,
+      "year": 2025,
+      "especificacaoDoCalculoDaMedia": {
+        "pesosDosConceitos": {
+          "MA": 10,
+          "MPA": 7,
+          "MANA": 0
+        },
+        "pesosDasMetas": {
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
+        }
+      },
+      "enrollments": []
+    },
+    {
+      "topic": "Status Distribution Test Class 1765355342323",
+      "semester": 1,
+      "year": 2025,
+      "especificacaoDoCalculoDaMedia": {
+        "pesosDosConceitos": {
+          "MA": 10,
+          "MPA": 7,
+          "MANA": 0
+        },
+        "pesosDasMetas": {
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
+        }
+      },
+      "enrollments": [
+        {
+          "studentCPF": "55555550001",
+          "evaluations": [
+            {
+              "goal": "Requirements",
+              "grade": "MA"
+            },
+            {
+              "goal": "Configuration Management",
+              "grade": "MA"
+            },
+            {
+              "goal": "Project Management",
+              "grade": "MA"
+            },
+            {
+              "goal": "Design",
+              "grade": "MA"
+            },
+            {
+              "goal": "Tests",
+              "grade": "MA"
+            },
+            {
+              "goal": "Refactoring",
+              "grade": "MA"
+            }
+          ]
+        },
+        {
+          "studentCPF": "55555550002",
+          "evaluations": [
+            {
+              "goal": "Requirements",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Configuration Management",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Project Management",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Design",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Tests",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Refactoring",
+              "grade": "MANA"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "topic": "Bar Chart Test Class 1765355355988",
+      "semester": 1,
+      "year": 2025,
+      "especificacaoDoCalculoDaMedia": {
+        "pesosDosConceitos": {
+          "MA": 10,
+          "MPA": 7,
+          "MANA": 0
+        },
+        "pesosDasMetas": {
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
+        }
+      },
+      "enrollments": [
+        {
+          "studentCPF": "66666660001",
+          "evaluations": [
+            {
+              "goal": "Tests",
+              "grade": "MA"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "topic": "Students Test Class 1765355369674",
+      "semester": 1,
+      "year": 2025,
+      "especificacaoDoCalculoDaMedia": {
+        "pesosDosConceitos": {
+          "MA": 10,
+          "MPA": 7,
+          "MANA": 0
+        },
+        "pesosDasMetas": {
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
+        }
+      },
+      "enrollments": [
+        {
+          "studentCPF": "77777770001",
+          "evaluations": []
+        }
+      ]
+    },
+    {
+      "topic": "Mixed Status Test Class 1765355383370",
+      "semester": 1,
+      "year": 2025,
+      "especificacaoDoCalculoDaMedia": {
+        "pesosDosConceitos": {
+          "MA": 10,
+          "MPA": 7,
+          "MANA": 0
+        },
+        "pesosDasMetas": {
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
+        }
+      },
+      "enrollments": [
+        {
+          "studentCPF": "33333330001",
+          "evaluations": [
+            {
+              "goal": "Requirements",
+              "grade": "MA"
+            },
+            {
+              "goal": "Configuration Management",
+              "grade": "MA"
+            },
+            {
+              "goal": "Project Management",
+              "grade": "MA"
+            },
+            {
+              "goal": "Design",
+              "grade": "MA"
+            },
+            {
+              "goal": "Tests",
+              "grade": "MA"
+            },
+            {
+              "goal": "Refactoring",
+              "grade": "MA"
+            }
+          ]
+        },
+        {
+          "studentCPF": "33333330002",
+          "evaluations": [
+            {
+              "goal": "Requirements",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Configuration Management",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Project Management",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Design",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Tests",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Refactoring",
+              "grade": "MANA"
+            }
+          ]
+        },
+        {
+          "studentCPF": "33333330003",
+          "evaluations": []
+        }
+      ]
+    },
+    {
+      "topic": "E2E Test Class 1765355514464",
+      "semester": 1,
+      "year": 2025,
+      "especificacaoDoCalculoDaMedia": {
+        "pesosDosConceitos": {
+          "MA": 10,
+          "MPA": 7,
+          "MANA": 0
+        },
+        "pesosDasMetas": {
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
+        }
+      },
+      "enrollments": [
+        {
+          "studentCPF": "11111110001",
+          "evaluations": []
+        },
+        {
+          "studentCPF": "11111110002",
+          "evaluations": []
+        },
+        {
+          "studentCPF": "11111110003",
+          "evaluations": []
+        },
+        {
+          "studentCPF": "11111110004",
+          "evaluations": []
+        },
+        {
+          "studentCPF": "11111110005",
+          "evaluations": []
+        }
+      ]
+    },
+    {
+      "topic": "No Evaluations Test Class 1765355521130",
+      "semester": 1,
+      "year": 2025,
+      "especificacaoDoCalculoDaMedia": {
+        "pesosDosConceitos": {
+          "MA": 10,
+          "MPA": 7,
+          "MANA": 0
+        },
+        "pesosDasMetas": {
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
+        }
+      },
+      "enrollments": [
+        {
+          "studentCPF": "44444444401",
+          "evaluations": []
+        }
+      ]
+    },
+    {
+      "topic": "E2E Test Class 1765355557703",
+      "semester": 1,
+      "year": 2025,
+      "especificacaoDoCalculoDaMedia": {
+        "pesosDosConceitos": {
+          "MA": 10,
+          "MPA": 7,
+          "MANA": 0
+        },
+        "pesosDasMetas": {
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
+        }
+      },
+      "enrollments": []
+    },
+    {
+      "topic": "Status Distribution Test Class 1765355563405",
+      "semester": 1,
+      "year": 2025,
+      "especificacaoDoCalculoDaMedia": {
+        "pesosDosConceitos": {
+          "MA": 10,
+          "MPA": 7,
+          "MANA": 0
+        },
+        "pesosDasMetas": {
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
+        }
+      },
+      "enrollments": [
+        {
+          "studentCPF": "55555550001",
+          "evaluations": [
+            {
+              "goal": "Requirements",
+              "grade": "MA"
+            },
+            {
+              "goal": "Configuration Management",
+              "grade": "MA"
+            },
+            {
+              "goal": "Project Management",
+              "grade": "MA"
+            },
+            {
+              "goal": "Design",
+              "grade": "MA"
+            },
+            {
+              "goal": "Tests",
+              "grade": "MA"
+            },
+            {
+              "goal": "Refactoring",
+              "grade": "MA"
+            }
+          ]
+        },
+        {
+          "studentCPF": "55555550002",
+          "evaluations": [
+            {
+              "goal": "Requirements",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Configuration Management",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Project Management",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Design",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Tests",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Refactoring",
+              "grade": "MANA"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "topic": "Bar Chart Test Class 1765355572930",
+      "semester": 1,
+      "year": 2025,
+      "especificacaoDoCalculoDaMedia": {
+        "pesosDosConceitos": {
+          "MA": 10,
+          "MPA": 7,
+          "MANA": 0
+        },
+        "pesosDasMetas": {
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
+        }
+      },
+      "enrollments": [
+        {
+          "studentCPF": "66666660001",
+          "evaluations": [
+            {
+              "goal": "Tests",
+              "grade": "MA"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "topic": "Students Test Class 1765355581834",
+      "semester": 1,
+      "year": 2025,
+      "especificacaoDoCalculoDaMedia": {
+        "pesosDosConceitos": {
+          "MA": 10,
+          "MPA": 7,
+          "MANA": 0
+        },
+        "pesosDasMetas": {
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
+        }
+      },
+      "enrollments": [
+        {
+          "studentCPF": "77777770001",
+          "evaluations": []
+        }
+      ]
+    },
+    {
+      "topic": "Mixed Status Test Class 1765355588963",
+      "semester": 1,
+      "year": 2025,
+      "especificacaoDoCalculoDaMedia": {
+        "pesosDosConceitos": {
+          "MA": 10,
+          "MPA": 7,
+          "MANA": 0
+        },
+        "pesosDasMetas": {
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
+        }
+      },
+      "enrollments": [
+        {
+          "studentCPF": "33333330001",
+          "evaluations": [
+            {
+              "goal": "Requirements",
+              "grade": "MA"
+            },
+            {
+              "goal": "Configuration Management",
+              "grade": "MA"
+            },
+            {
+              "goal": "Project Management",
+              "grade": "MA"
+            },
+            {
+              "goal": "Design",
+              "grade": "MA"
+            },
+            {
+              "goal": "Tests",
+              "grade": "MA"
+            },
+            {
+              "goal": "Refactoring",
+              "grade": "MA"
+            }
+          ]
+        },
+        {
+          "studentCPF": "33333330002",
+          "evaluations": [
+            {
+              "goal": "Requirements",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Configuration Management",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Project Management",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Design",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Tests",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Refactoring",
+              "grade": "MANA"
+            }
+          ]
+        },
+        {
+          "studentCPF": "33333330003",
+          "evaluations": []
+        }
+      ]
+    },
+    {
+      "topic": "E2E Test Class 1765355636462",
+      "semester": 1,
+      "year": 2025,
+      "especificacaoDoCalculoDaMedia": {
+        "pesosDosConceitos": {
+          "MA": 10,
+          "MPA": 7,
+          "MANA": 0
+        },
+        "pesosDasMetas": {
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
+        }
+      },
+      "enrollments": [
+        {
+          "studentCPF": "11111110001",
+          "evaluations": []
+        },
+        {
+          "studentCPF": "11111110002",
+          "evaluations": []
+        },
+        {
+          "studentCPF": "11111110003",
+          "evaluations": []
+        },
+        {
+          "studentCPF": "11111110004",
+          "evaluations": []
+        },
+        {
+          "studentCPF": "11111110005",
+          "evaluations": []
+        }
+      ]
+    },
+    {
+      "topic": "No Evaluations Test Class 1765355643089",
+      "semester": 1,
+      "year": 2025,
+      "especificacaoDoCalculoDaMedia": {
+        "pesosDosConceitos": {
+          "MA": 10,
+          "MPA": 7,
+          "MANA": 0
+        },
+        "pesosDasMetas": {
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
+        }
+      },
+      "enrollments": [
+        {
+          "studentCPF": "44444444401",
+          "evaluations": []
+        }
+      ]
+    },
+    {
+      "topic": "E2E Test Class 1765355649704",
+      "semester": 1,
+      "year": 2025,
+      "especificacaoDoCalculoDaMedia": {
+        "pesosDosConceitos": {
+          "MA": 10,
+          "MPA": 7,
+          "MANA": 0
+        },
+        "pesosDasMetas": {
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
+        }
+      },
+      "enrollments": []
+    },
+    {
+      "topic": "Status Distribution Test Class 1765355655463",
+      "semester": 1,
+      "year": 2025,
+      "especificacaoDoCalculoDaMedia": {
+        "pesosDosConceitos": {
+          "MA": 10,
+          "MPA": 7,
+          "MANA": 0
+        },
+        "pesosDasMetas": {
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
+        }
+      },
+      "enrollments": [
+        {
+          "studentCPF": "55555550001",
+          "evaluations": [
+            {
+              "goal": "Requirements",
+              "grade": "MA"
+            },
+            {
+              "goal": "Configuration Management",
+              "grade": "MA"
+            },
+            {
+              "goal": "Project Management",
+              "grade": "MA"
+            },
+            {
+              "goal": "Design",
+              "grade": "MA"
+            },
+            {
+              "goal": "Tests",
+              "grade": "MA"
+            },
+            {
+              "goal": "Refactoring",
+              "grade": "MA"
+            }
+          ]
+        },
+        {
+          "studentCPF": "55555550002",
+          "evaluations": [
+            {
+              "goal": "Requirements",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Configuration Management",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Project Management",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Design",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Tests",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Refactoring",
+              "grade": "MANA"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "topic": "Bar Chart Test Class 1765355664990",
+      "semester": 1,
+      "year": 2025,
+      "especificacaoDoCalculoDaMedia": {
+        "pesosDosConceitos": {
+          "MA": 10,
+          "MPA": 7,
+          "MANA": 0
+        },
+        "pesosDasMetas": {
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
+        }
+      },
+      "enrollments": [
+        {
+          "studentCPF": "66666660001",
+          "evaluations": [
+            {
+              "goal": "Tests",
+              "grade": "MA"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "topic": "Students Test Class 1765355673870",
+      "semester": 1,
+      "year": 2025,
+      "especificacaoDoCalculoDaMedia": {
+        "pesosDosConceitos": {
+          "MA": 10,
+          "MPA": 7,
+          "MANA": 0
+        },
+        "pesosDasMetas": {
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
+        }
+      },
+      "enrollments": [
+        {
+          "studentCPF": "77777770001",
+          "evaluations": []
+        }
+      ]
+    },
+    {
+      "topic": "Mixed Status Test Class 1765355681024",
+      "semester": 1,
+      "year": 2025,
+      "especificacaoDoCalculoDaMedia": {
+        "pesosDosConceitos": {
+          "MA": 10,
+          "MPA": 7,
+          "MANA": 0
+        },
+        "pesosDasMetas": {
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
+        }
+      },
+      "enrollments": [
+        {
+          "studentCPF": "33333330001",
+          "evaluations": [
+            {
+              "goal": "Requirements",
+              "grade": "MA"
+            },
+            {
+              "goal": "Configuration Management",
+              "grade": "MA"
+            },
+            {
+              "goal": "Project Management",
+              "grade": "MA"
+            },
+            {
+              "goal": "Design",
+              "grade": "MA"
+            },
+            {
+              "goal": "Tests",
+              "grade": "MA"
+            },
+            {
+              "goal": "Refactoring",
+              "grade": "MA"
+            }
+          ]
+        },
+        {
+          "studentCPF": "33333330002",
+          "evaluations": [
+            {
+              "goal": "Requirements",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Configuration Management",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Project Management",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Design",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Tests",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Refactoring",
+              "grade": "MANA"
+            }
+          ]
+        },
+        {
+          "studentCPF": "33333330003",
+          "evaluations": []
+        }
+      ]
+    },
+    {
+      "topic": "E2E Test Class 1765355705148",
+      "semester": 1,
+      "year": 2025,
+      "especificacaoDoCalculoDaMedia": {
+        "pesosDosConceitos": {
+          "MA": 10,
+          "MPA": 7,
+          "MANA": 0
+        },
+        "pesosDasMetas": {
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
+        }
+      },
+      "enrollments": [
+        {
+          "studentCPF": "11111110001",
+          "evaluations": []
+        },
+        {
+          "studentCPF": "11111110002",
+          "evaluations": []
+        },
+        {
+          "studentCPF": "11111110003",
+          "evaluations": []
+        },
+        {
+          "studentCPF": "11111110004",
+          "evaluations": []
+        },
+        {
+          "studentCPF": "11111110005",
+          "evaluations": []
+        }
+      ]
+    },
+    {
+      "topic": "No Evaluations Test Class 1765355711879",
+      "semester": 1,
+      "year": 2025,
+      "especificacaoDoCalculoDaMedia": {
+        "pesosDosConceitos": {
+          "MA": 10,
+          "MPA": 7,
+          "MANA": 0
+        },
+        "pesosDasMetas": {
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
+        }
+      },
+      "enrollments": [
+        {
+          "studentCPF": "44444444401",
+          "evaluations": []
+        }
+      ]
+    },
+    {
+      "topic": "E2E Test Class 1765355718519",
+      "semester": 1,
+      "year": 2025,
+      "especificacaoDoCalculoDaMedia": {
+        "pesosDosConceitos": {
+          "MA": 10,
+          "MPA": 7,
+          "MANA": 0
+        },
+        "pesosDasMetas": {
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
+        }
+      },
+      "enrollments": []
+    },
+    {
+      "topic": "Status Distribution Test Class 1765355724269",
+      "semester": 1,
+      "year": 2025,
+      "especificacaoDoCalculoDaMedia": {
+        "pesosDosConceitos": {
+          "MA": 10,
+          "MPA": 7,
+          "MANA": 0
+        },
+        "pesosDasMetas": {
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
+        }
+      },
+      "enrollments": [
+        {
+          "studentCPF": "55555550001",
+          "evaluations": [
+            {
+              "goal": "Requirements",
+              "grade": "MA"
+            },
+            {
+              "goal": "Configuration Management",
+              "grade": "MA"
+            },
+            {
+              "goal": "Project Management",
+              "grade": "MA"
+            },
+            {
+              "goal": "Design",
+              "grade": "MA"
+            },
+            {
+              "goal": "Tests",
+              "grade": "MA"
+            },
+            {
+              "goal": "Refactoring",
+              "grade": "MA"
+            }
+          ]
+        },
+        {
+          "studentCPF": "55555550002",
+          "evaluations": [
+            {
+              "goal": "Requirements",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Configuration Management",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Project Management",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Design",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Tests",
+              "grade": "MANA"
+            },
+            {
+              "goal": "Refactoring",
+              "grade": "MANA"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "topic": "Bar Chart Test Class 1765355733810",
+      "semester": 1,
+      "year": 2025,
+      "especificacaoDoCalculoDaMedia": {
+        "pesosDosConceitos": {
+          "MA": 10,
+          "MPA": 7,
+          "MANA": 0
+        },
+        "pesosDasMetas": {
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
+        }
+      },
+      "enrollments": [
+        {
+          "studentCPF": "66666660001",
+          "evaluations": [
+            {
+              "goal": "Tests",
+              "grade": "MA"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "topic": "Students Test Class 1765355742701",
+      "semester": 1,
+      "year": 2025,
+      "especificacaoDoCalculoDaMedia": {
+        "pesosDosConceitos": {
+          "MA": 10,
+          "MPA": 7,
+          "MANA": 0
+        },
+        "pesosDasMetas": {
+          "Requirements": 1,
+          "Configuration Management": 1,
+          "Project Management": 1,
+          "Design": 1,
+          "Tests": 1,
+          "Refactoring": 1
+        }
+      },
+      "enrollments": [
+        {
+          "studentCPF": "77777770001",
+          "evaluations": []
+        }
+      ]
+    },
+    {
+      "topic": "Mixed Status Test Class 1765355749882",
       "semester": 1,
       "year": 2025,
       "especificacaoDoCalculoDaMedia": {
