@@ -1,68 +1,54 @@
-@integration
-Feature: Data Persistence - Integration Layer Tests
-  As a system
-  I need data changes to be immediately reflected in API responses
-  So that reports always show current and accurate information
+@integration @persistence
+Feature: Data Persistence & Consistency
 
-  # Layer: Integration Tests (Middle-Upper of Testing Pyramid)
-  # Context: Tests flow between API and data persistence layer
-  # Verifies write-read consistency and data integrity
+  As a Backend Engineer
+  I need data changes (Writes) to be immediately available to API queries (Reads)
+  So that the reports reflect the real-time state of the database
 
   Background:
-    Given the API server is running and connected to the data store
-    And a test class "Integration Test Class" exists
+    Given the API is connected to the Test Database
+    And a fresh class "Integration-101" exists
 
-  # ===========================================================================
-  # TEST 1: Write-Read Consistency - Student Enrollment
-  # ===========================================================================
   @write-read
-  Scenario: New student enrollment is immediately reflected in report
-    Given the class has 2 enrolled students initially
-    When I enroll a new student "New Student" with CPF "77777777701"
-    And I request the class report
+  Scenario: New student enrollment updates the report total
+    Given the class "Integration-101" has exactly "2" existing students
+    When I enroll a new student with CPF "999.999.999-01"
+    And I request the report for "Integration-101"
     Then the "totalEnrolled" count should be 3
 
-  # ===========================================================================
-  # TEST 2: Data Deletion - Student Unenrollment
-  # ===========================================================================
   @deletion
-  Scenario: Student unenrollment is immediately reflected in report
-    Given the class has the following enrolled students:
-      | name      | cpf         |
-      | Student A | 66666666601 |
-      | Student B | 66666666602 |
-      | Student C | 66666666603 |
-    And all students have complete grades
-    When I unenroll student with CPF "66666666603"
-    And I request the class report
+  Scenario: Unenrolling a student removes them from the report
+    Given the class "Integration-101" has the following students:
+      | Name      | CPF             |
+      | Student A | 111.111.111-11  |
+      | Student B | 222.222.222-22  |
+      | Student C | 333.333.333-33  |
+    When I unenroll the student "333.333.333-33"
+    And I request the report for "Integration-101"
     Then the "totalEnrolled" count should be 2
-    And the student "Student C" should not appear in the students list
+    And the student "Student C" should NOT be present in the list
 
-  # ===========================================================================
-  # TEST 3: Grade Update Consistency
-  # ===========================================================================
-  @update
-  Scenario: Grade updates are immediately reflected in calculations
-    Given the class has a student "Grade Test" with CPF "55555555501"
-    And the student has grades: Requirements=MA, Design=MA, Tests=MANA
-    When I update the student's "Tests" grade to "MA"
-    And I request the class report
-    Then the student "Grade Test" should have status "APPROVED"
+  @update @logic
+  Scenario: Updating a grade changes the calculated status
+    Given the class "Integration-101" has a student "Grade Tester"
+    And "Grade Tester" has the grades:
+      | Requirements | MA    |
+      | Design       | MANA  |    
+    When I update "Grade Tester" grade for "Design" to "MA"
+    And I request the report for "Integration-101"    
+    Then "Grade Tester" should have status "APPROVED"
     And the "approvedCount" should be 1
 
-  # ===========================================================================
-  # TEST 4: Concurrent Data Integrity
-  # ===========================================================================
-  @integrity
-  Scenario: Multiple operations maintain data integrity
-    Given the class has 1 enrolled student initially
-    When I perform the following operations in sequence:
-      | operation | student     | cpf         |
-      | enroll    | Student X   | 44444444401 |
-      | enroll    | Student Y   | 44444444402 |
-      | unenroll  | -           | 44444444401 |
-    And I request the class report
+  @integrity @sequence
+  Scenario: Multiple add/remove operations maintain correct count
+    Given the class "Integration-101" is empty
+    When I perform the following operations in order:
+      | Action   | Student Name | CPF            |
+      | Enroll   | Alice        | 100.000.000-01 |
+      | Enroll   | Bob          | 200.000.000-02 |
+      | Enroll   | Charlie      | 300.000.000-03 |
+      | Unenroll | -            | 200.000.000-02 |
+    And I request the report for "Integration-101"
     Then the "totalEnrolled" count should be 2
-    And the report should contain students:
-      | name      |
-      | Student Y |
+    And the list should contain "Alice" and "Charlie"
+    And the list should NOT contain "Bob"

@@ -103,9 +103,9 @@ const EvaluationBarChart: React.FC<EvaluationBarChartProps> = ({ data }) => {
   const hasAnyData = chartData.some(item => item.hasData);
 
   return (
-    <div className="chart-container">
+    <div className="chart-container" data-testid="evaluation-bar-chart">
       <h4>Evaluation Performance</h4>
-      <div className="chart-wrapper">
+      <div className="chart-wrapper" data-testid="bar-chart-wrapper">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
             data={chartData.length > 0 ? chartData : [{ goal: '', averageGrade: 0, hasData: false }]}

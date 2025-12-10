@@ -1,13 +1,13 @@
 import { Given, When, Then, Before, After, DataTable, setDefaultTimeout } from '@cucumber/cucumber';
-import { Browser, Page, launch } from 'puppeteer';
+import { Page } from 'puppeteer';
 import expect from 'expect';
+import { getPage } from './shared-browser';
 
 setDefaultTimeout(60 * 1000);
 
 const baseUrl = 'http://127.0.0.1:3004';
 const serverUrl = 'http://127.0.0.1:3005';
 
-let browser: Browser;
 let page: Page;
 let currentClassId: string | null = null;
 let createdCpfs: string[] = [];
@@ -15,15 +15,7 @@ let createdCpfs: string[] = [];
 Before({ tags: '@gui-report' }, async function () {
   currentClassId = null;
   createdCpfs = [];
-
-  browser = await launch({ 
-    headless: false, 
-    slowMo: 50, 
-    defaultViewport: null, 
-    args: ['--start-maximized'] 
-  });
-
-  page = await browser.newPage();
+  page = await getPage();
 });
 
 After({ tags: '@gui-report' }, async function () {
@@ -45,10 +37,7 @@ After({ tags: '@gui-report' }, async function () {
       console.log(`Failed to remove class.`);
     }
   }
-  
-  if (browser) {
-    await browser.close();
-  }
+  // Browser is closed by AfterAll in shared-browser.ts
 });
 
 Given('a class exists with name {string} for GUI testing', async function (className: string) {  

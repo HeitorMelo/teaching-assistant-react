@@ -301,7 +301,7 @@ return (
           </div>
         ) : (
           <div className="table-container">
-            <table>
+            <table data-testid="classes-table">
               <thead>
                 <tr>
                   <th>Topic</th>
@@ -313,15 +313,16 @@ return (
               </thead>
               <tbody>
                 {classes.map((classObj) => (
-                  <tr key={getClassId(classObj)}>
+                  <tr key={getClassId(classObj)} data-testid={`class-row-${getClassId(classObj)}`}>
                     <td><strong>{classObj.topic}</strong></td>
                     <td><strong>{classObj.year}</strong></td>
                     <td><strong>{classObj.semester === 1 ? '1st Semester' : '2nd Semester'}</strong></td>
-                    <td>{classObj.enrollments.length}</td>
+                    <td data-testid="enrolled-count">{classObj.enrollments.length}</td>
                     <td>
                       <div className="actions-grid">
                         <button
                           className="edit-btn"
+                          data-testid={`edit-class-${getClassId(classObj)}`}
                           onClick={() => handleEdit(classObj)}
                           title="Edit class"
                         >
@@ -329,6 +330,7 @@ return (
                         </button>
                         <button
                           className="delete-btn"
+                          data-testid={`delete-class-${getClassId(classObj)}`}
                           onClick={() => handleDelete(classObj)}
                           title="Delete class"
                         >
@@ -336,6 +338,7 @@ return (
                         </button>
                         <button
                           className="enroll-btn"
+                          data-testid={`enroll-class-${getClassId(classObj)}`}
                           onClick={() => handleOpenEnrollmentPanel(classObj)}
                           title="Enroll students"
                         >
@@ -343,6 +346,7 @@ return (
                         </button>
                         <button
                           className="report-btn"
+                          data-testid={`report-class-${getClassId(classObj)}`}
                           onClick={() => handleOpenReportPanel(classObj)}
                           title="View class report"
                         >

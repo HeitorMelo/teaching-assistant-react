@@ -22,7 +22,7 @@ setDefaultTimeout(60 * 1000);
 let response: request.Response;
 let currentClassId: string | null = null;
 let createdStudentCPFs: string[] = [];
-let initialEnrollmentCount: number = 0;
+let studentNameToCPF: Record<string, string> = {};
 
 // =============================================================================
 // Hooks
@@ -31,7 +31,7 @@ let initialEnrollmentCount: number = 0;
 Before({ tags: '@integration' }, async function () {
   currentClassId = null;
   createdStudentCPFs = [];
-  initialEnrollmentCount = 0;
+  studentNameToCPF = {};
 });
 
 After({ tags: '@integration' }, async function () {
@@ -58,49 +58,61 @@ After({ tags: '@integration' }, async function () {
 // Helper Functions
 // =============================================================================
 
+function normalizeCPF(cpf: string): string {
+  return cpf.replace(/[.\-]/g, '');
+}
+
 async function createStudent(name: string, cpf: string): Promise<void> {
+  const normalizedCPF = normalizeCPF(cpf);
+  const email = `${name.toLowerCase().replace(/\s+/g, '.')}@test.com`;
+  
   await request(app)
     .post('/api/students')
-    .send({ name, cpf });
-  createdStudentCPFs.push(cpf);
+    .send({ name, cpf: normalizedCPF, email });
+  createdStudentCPFs.push(normalizedCPF);
+  studentNameToCPF[name] = normalizedCPF;
 }
 
 async function enrollStudent(cpf: string): Promise<void> {
   if (!currentClassId) throw new Error('No class ID');
+  const normalizedCPF = normalizeCPF(cpf);
   await request(app)
     .post(`/api/classes/${currentClassId}/enroll`)
-    .send({ studentCPF: cpf });
+    .send({ studentCPF: normalizedCPF });
 }
 
 async function unenrollStudent(cpf: string): Promise<void> {
   if (!currentClassId) throw new Error('No class ID');
+  const normalizedCPF = normalizeCPF(cpf);
   await request(app)
-    .delete(`/api/classes/${currentClassId}/enroll/${cpf}`);
+    .delete(`/api/classes/${currentClassId}/enroll/${normalizedCPF}`);
 }
 
 async function addGrade(cpf: string, goal: string, grade: string): Promise<void> {
   if (!currentClassId) throw new Error('No class ID');
+  const normalizedCPF = normalizeCPF(cpf);
   await request(app)
-    .put(`/api/classes/${currentClassId}/enrollments/${cpf}/evaluation`)
+    .put(`/api/classes/${currentClassId}/enrollments/${normalizedCPF}/evaluation`)
     .send({ goal, grade });
 }
 
 async function addCompleteGrades(cpf: string): Promise<void> {
-  await addGrade(cpf, 'Requirements', 'MA');
-  await addGrade(cpf, 'Design', 'MA');
-  await addGrade(cpf, 'Tests', 'MA');
+  const goals = ['Requirements', 'Configuration Management', 'Project Management', 'Design', 'Tests', 'Refactoring'];
+  for (const goal of goals) {
+    await addGrade(cpf, goal, 'MA');
+  }
 }
 
 // =============================================================================
 // GIVEN Steps
 // =============================================================================
 
-Given('the API server is running and connected to the data store', async function () {
+Given('the API is connected to the Test Database', async function () {
   const res = await request(app).get('/api/students');
   expect(res.status).toBe(200);
 });
 
-Given('a test class {string} exists', async function (topic: string) {
+Given('a fresh class {string} exists', async function (topic: string) {
   const res = await request(app)
     .post('/api/classes')
     .send({
@@ -112,79 +124,89 @@ Given('a test class {string} exists', async function (topic: string) {
   currentClassId = res.body.id;
 });
 
-Given('the class has {int} enrolled students initially', async function (count: number) {
-  initialEnrollmentCount = count;
+Given('the class {string} has exactly {string} existing students', async function (className: string, count: string) {
+  const studentCount = parseInt(count, 10);
   
-  for (let i = 1; i <= count; i++) {
-    const cpf = `9999999900${i}`;
-    await createStudent(`Initial Student ${i}`, cpf);
+  for (let i = 1; i <= studentCount; i++) {
+    const cpf = `9999999900${i.toString().padStart(2, '0')}`;
+    await createStudent(`Existing Student ${i}`, cpf);
     await enrollStudent(cpf);
   }
 });
 
-Given('the class has the following enrolled students:', async function (dataTable: DataTable) {
+Given('the class {string} has the following students:', async function (className: string, dataTable: DataTable) {
   const rows = dataTable.hashes();
   
   for (const row of rows) {
-    await createStudent(row.name, row.cpf);
-    await enrollStudent(row.cpf);
-  }
-  
-  initialEnrollmentCount = rows.length;
-});
-
-Given('all students have complete grades', async function () {
-  for (const cpf of createdStudentCPFs) {
-    await addCompleteGrades(cpf);
+    await createStudent(row.Name, row.CPF);
+    await enrollStudent(row.CPF);
   }
 });
 
-Given('the class has a student {string} with CPF {string}', async function (name: string, cpf: string) {
-  await createStudent(name, cpf);
+Given('the class {string} has a student {string}', async function (className: string, studentName: string) {
+  const cpf = `8888888800${createdStudentCPFs.length + 1}`;
+  await createStudent(studentName, cpf);
   await enrollStudent(cpf);
 });
 
-Given('the student has grades: Requirements={word}, Design={word}, Tests={word}', 
-  async function (req: string, design: string, tests: string) {
-    const cpf = createdStudentCPFs[createdStudentCPFs.length - 1];
-    await addGrade(cpf, 'Requirements', req);
-    await addGrade(cpf, 'Design', design);
-    await addGrade(cpf, 'Tests', tests);
+Given('{string} has the grades:', async function (studentName: string, dataTable: DataTable) {
+  const cpf = studentNameToCPF[studentName];
+  if (!cpf) throw new Error(`Student ${studentName} not found`);
+  
+  const rows = dataTable.hashes();
+  for (const row of rows) {
+    // Handle row format like: | Requirements | MA |
+    const keys = Object.keys(row);
+    if (keys.length >= 2) {
+      const goal = keys[0];
+      const grade = row[goal];
+      await addGrade(cpf, goal, grade);
+    }
   }
-);
+});
+
+Given('the class {string} is empty', async function (className: string) {
+  // Class already created in Background, just verify it has no enrollments
+});
 
 // =============================================================================
 // WHEN Steps
 // =============================================================================
 
-When('I enroll a new student {string} with CPF {string}', async function (name: string, cpf: string) {
-  await createStudent(name, cpf);
+When('I enroll a new student with CPF {string}', async function (cpf: string) {
+  const studentName = `New Student ${createdStudentCPFs.length + 1}`;
+  await createStudent(studentName, cpf);
   await enrollStudent(cpf);
 });
 
-When('I unenroll student with CPF {string}', async function (cpf: string) {
+When('I unenroll the student {string}', async function (cpf: string) {
   await unenrollStudent(cpf);
 });
 
-When('I update the student\'s {string} grade to {string}', async function (goal: string, grade: string) {
-  const cpf = createdStudentCPFs[createdStudentCPFs.length - 1];
+When('I update {string} grade for {string} to {string}', async function (studentName: string, goal: string, grade: string) {
+  const cpf = studentNameToCPF[studentName];
+  if (!cpf) throw new Error(`Student ${studentName} not found`);
   await addGrade(cpf, goal, grade);
 });
 
-When('I request the class report', async function () {
+When('I request the report for {string}', async function (className: string) {
   if (!currentClassId) throw new Error('No class ID');
   response = await request(app).get(`/api/classes/${currentClassId}/report`);
 });
 
-When('I perform the following operations in sequence:', async function (dataTable: DataTable) {
+When('I perform the following operations in order:', async function (dataTable: DataTable) {
   const operations = dataTable.hashes();
   
   for (const op of operations) {
-    if (op.operation === 'enroll') {
-      await createStudent(op.student, op.cpf);
-      await enrollStudent(op.cpf);
-    } else if (op.operation === 'unenroll') {
-      await unenrollStudent(op.cpf);
+    const action = op.Action.toLowerCase();
+    const cpf = op.CPF;
+    const studentName = op['Student Name'];
+    
+    if (action === 'enroll') {
+      await createStudent(studentName, cpf);
+      await enrollStudent(cpf);
+    } else if (action === 'unenroll') {
+      await unenrollStudent(cpf);
     }
   }
 });
@@ -197,13 +219,13 @@ Then('the {string} count should be {int}', function (field: string, expected: nu
   expect(response.body[field]).toBe(expected);
 });
 
-Then('the student {string} should not appear in the students list', function (studentName: string) {
+Then('the student {string} should NOT be present in the list', function (studentName: string) {
   const students = response.body.students || [];
   const found = students.find((s: any) => s.name === studentName);
   expect(found).toBeUndefined();
 });
 
-Then('the student {string} should have status {string}', function (studentName: string, expectedStatus: string) {
+Then('{string} should have status {string}', function (studentName: string, expectedStatus: string) {
   const students = response.body.students || [];
   const student = students.find((s: any) => s.name === studentName);
   expect(student).toBeDefined();
@@ -214,11 +236,17 @@ Then('the {string} should be {int}', function (field: string, expected: number) 
   expect(response.body[field]).toBe(expected);
 });
 
-Then('the report should contain students:', function (dataTable: DataTable) {
-  const expectedNames = dataTable.hashes().map(row => row.name);
-  const actualNames = (response.body.students || []).map((s: any) => s.name);
+Then('the list should contain {string} and {string}', function (name1: string, name2: string) {
+  const students = response.body.students || [];
+  const names = students.map((s: any) => s.name);
   
-  for (const name of expectedNames) {
-    expect(actualNames).toContain(name);
-  }
+  expect(names).toContain(name1);
+  expect(names).toContain(name2);
+});
+
+Then('the list should NOT contain {string}', function (studentName: string) {
+  const students = response.body.students || [];
+  const names = students.map((s: any) => s.name);
+  
+  expect(names).not.toContain(studentName);
 });

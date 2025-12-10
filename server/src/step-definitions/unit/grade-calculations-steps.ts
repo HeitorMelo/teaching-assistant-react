@@ -81,12 +81,9 @@ let groupingResult: Record<string, number> = {};
 // GIVEN Steps
 // =============================================================================
 
-Given('I have a list of grades with values [{float}, null, {float}]', function (first: number, second: number) {
-  gradeList = [first, null, second];
-});
-
-Given('I have a list of grades with values [null, null, null]', function () {
-  gradeList = [null, null, null];
+// Pattern: [10, null, 5]
+Given(/^I have a list of grades with values \[([\d.]+), null, ([\d.]+)\]$/, function (first: string, second: string) {
+  gradeList = [parseFloat(first), null, parseFloat(second)];
 });
 
 Given('I have an empty list of grades', function () {
@@ -115,19 +112,19 @@ Given('I have a list of students with statuses:', function (dataTable: DataTable
 // WHEN Steps
 // =============================================================================
 
-When('I calculate the average using calculateAverage', function () {
+When('I calculate the grade average', function () {
   calculationResult = calculateAverage(gradeList);
 });
 
-When('I convert it using convertGradeToValue', function () {
+When('I convert it to a numeric value', function () {
   calculationResult = convertGradeToValue(gradeAcronym);
 });
 
-When('I determine the student status using determineStudentStatus', function () {
+When('I evaluate the student\'s final status', function () {
   statusResult = determineStudentStatus(studentGrades);
 });
 
-When('I group students by status using groupStudentsByStatus', function () {
+When('I aggregate the student statuses', function () {
   groupingResult = groupStudentsByStatus(studentList);
 });
 
@@ -140,10 +137,6 @@ Then('the result should be {float}', function (expected: number) {
 });
 
 Then('the result should be {int}', function (expected: number) {
-  expect(calculationResult).toBe(expected);
-});
-
-Then('the numeric value should be {int}', function (expected: number) {
   expect(calculationResult).toBe(expected);
 });
 
