@@ -40,5 +40,15 @@ cypress/videos/
 cypress/screenshots/
 cypress/downloads/
 
+# Cucumber test reports (client-side)
+client/reports/
+cucumber-report.*
+
+# Jest coverage directory
+coverage/
+
+# Multer temporary folder
+tmp_data/
+
 # Notes
 notes/

@@ -2,9 +2,12 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Class, CreateClassRequest, getClassId } from '../types/Class';
 import { Student } from '../types/Student';
+import { ReportData } from '../types/Report';
 import ClassService from '../services/ClassService';
 import { studentService } from '../services/StudentService';
 import EnrollmentService from '../services/EnrollmentService';
+import { DEFAULT_ESPECIFICACAO_DO_CALCULO_DE_MEDIA, EspecificacaoDoCalculoDaMedia } from '../types/EspecificacaoDoCalculoDaMedia';
+import ClassReport from './ClassReport';
 
 interface ClassesProps {
   classes: Class[];
@@ -24,7 +27,8 @@ const Classes: React.FC<ClassesProps> = ({
   const [formData, setFormData] = useState<CreateClassRequest>({
     topic: '',
     semester: 1,
-    year: new Date().getFullYear()
+    year: new Date().getFullYear(),
+    especificacaoDoCalculoDaMedia: DEFAULT_ESPECIFICACAO_DO_CALCULO_DE_MEDIA
   });
   const [editingClass, setEditingClass] = useState<Class | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -41,6 +45,11 @@ const Classes: React.FC<ClassesProps> = ({
   
   // Navigation hook
   const navigate = useNavigate();
+
+  // Report state - only track which class to show report for
+  const [reportPanelClass, setReportPanelClass] = useState<Class | null>(null);
+  const [reportData, setReportData] = useState<ReportData | null>(null);
+  const [isLoadingReport, setIsLoadingReport] = useState(false);
 
   // Load all students for enrollment dropdown
   const loadAllStudents = useCallback(async () => {
@@ -178,6 +187,16 @@ const Classes: React.FC<ClassesProps> = ({
     return allStudents.filter(student => !enrolledStudentCPFs.has(student.cpf));
   };
 
+  // Handle opening report panel for a specific class
+  const handleOpenReportPanel = (classObj: Class) => {
+    setReportPanelClass(classObj);
+  };
+
+  // Handle closing report panel
+  const handleCloseReportPanel = () => {
+    setReportPanelClass(null);
+  };
+
   // Handle form input changes
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -214,7 +233,8 @@ const Classes: React.FC<ClassesProps> = ({
       setFormData({
         topic: '',
         semester: 1,
-        year: new Date().getFullYear()
+        year: new Date().getFullYear(),
+        especificacaoDoCalculoDaMedia: DEFAULT_ESPECIFICACAO_DO_CALCULO_DE_MEDIA
       });
     } catch (error) {
       onError((error as Error).message);
@@ -229,7 +249,8 @@ const Classes: React.FC<ClassesProps> = ({
     setFormData({
       topic: classObj.topic,
       semester: classObj.semester,
-      year: classObj.year
+      year: classObj.year,
+      especificacaoDoCalculoDaMedia: classObj.especificacaoDoCalculoDaMedia
     });
   };
 
@@ -239,7 +260,8 @@ const Classes: React.FC<ClassesProps> = ({
     setFormData({
       topic: '',
       semester: 1,
-      year: new Date().getFullYear()
+      year: new Date().getFullYear(),
+      especificacaoDoCalculoDaMedia: DEFAULT_ESPECIFICACAO_DO_CALCULO_DE_MEDIA
     });
   };
 
@@ -259,7 +281,7 @@ const Classes: React.FC<ClassesProps> = ({
   const currentYear = new Date().getFullYear();
   const yearOptions = Array.from({ length: 10 }, (_, i) => currentYear - 5 + i);
 
-  return (
+return (
     <div className="classes-container">
       <h2>Class Management</h2>
       
@@ -354,27 +376,36 @@ const Classes: React.FC<ClassesProps> = ({
                     <td><strong>{classObj.semester === 1 ? '1st Semester' : '2nd Semester'}</strong></td>
                     <td>{classObj.enrollments.length}</td>
                     <td>
-                      <button
-                        className="edit-btn"
-                        onClick={() => handleEdit(classObj)}
-                        title="Edit class"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        className="delete-btn"
-                        onClick={() => handleDelete(classObj)}
-                        title="Delete class"
-                      >
-                        Delete
-                      </button>
-                      <button
-                        className="enroll-btn"
-                        onClick={() => handleOpenEnrollmentPanel(classObj)}
-                        title="Enroll students"
-                      >
-                        Enroll
-                      </button>
+                      <div className="actions-grid">
+                        <button
+                          className="edit-btn"
+                          onClick={() => handleEdit(classObj)}
+                          title="Edit class"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          className="delete-btn"
+                          onClick={() => handleDelete(classObj)}
+                          title="Delete class"
+                        >
+                          Delete
+                        </button>
+                        <button
+                          className="enroll-btn"
+                          onClick={() => handleOpenEnrollmentPanel(classObj)}
+                          title="Enroll students"
+                        >
+                          Enroll
+                        </button>
+                        <button
+                          className="report-btn"
+                          onClick={() => handleOpenReportPanel(classObj)}
+                          title="View class report"
+                        >
+                          Report
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -516,6 +547,15 @@ const Classes: React.FC<ClassesProps> = ({
             </div>
           </div>
         </div>
+      )}
+
+      {/* Report Panel - Agora simplificado usando o componente extraído */}
+      {reportPanelClass && (
+        <ClassReport
+          classObj={reportPanelClass}
+          onClose={handleCloseReportPanel}
+          onError={onError}
+        />
       )}
     </div>
   );

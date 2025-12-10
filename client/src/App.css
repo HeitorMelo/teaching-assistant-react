@@ -754,21 +754,13 @@ tbody tr:last-child td {
 
 /* Update enroll button in table */
 .enroll-btn {
-  background-color: #3b82f6;
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
   color: white;
-  border: none;
-  padding: 0.5rem 0.75rem;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.875rem;
-  font-weight: 500;
-  margin-left: 0.5rem;
-  transition: background-color 0.2s;
-  min-width: auto;
 }
 
 .enroll-btn:hover {
-  background-color: #2563eb;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
 }
 
 /* Evaluations Table */
@@ -1193,7 +1185,523 @@ tbody tr:last-child td {
   background-color: #fecaca;
   color: #991b1b;
 }
-/* Bulk Import Section */
+
+/* Actions Grid - 2x2 Button Layout */
+.actions-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.actions-grid button {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  min-width: 0;
+  width: 100%;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* Report Button */
+.report-btn {
+  background: linear-gradient(135deg, #f6ab3b 0%, #ffa620 100%);
+  color: white;
+}
+
+.report-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+}
+
+/* Report Modal */
+.report-modal {
+  background-color: white;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 1000px;
+  max-height: 90vh;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+}
+
+.report-modal-content {
+  padding: 1.5rem;
+  overflow-y: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.loading-report {
+  text-align: center;
+  padding: 3rem;
+  color: #6b7280;
+}
+
+.no-report-data {
+  text-align: center;
+  padding: 3rem;
+  color: #6b7280;
+}
+
+/* Report Statistics Grid - Two Columns */
+.report-stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.report-stat-card {
+  background-color: #f8fafc;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.report-stat-card h4 {
+  margin: 0 0 1rem 0;
+  color: #374151;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-bottom: 2px solid #667eea;
+  padding-bottom: 0.5rem;
+}
+
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.stat-item:last-child {
+  border-bottom: none;
+}
+
+.stat-label {
+  font-weight: 500;
+  color: #6b7280;
+  font-size: 0.95rem;
+}
+
+.stat-value {
+  font-weight: 700;
+  color: #111827;
+  font-size: 1.5rem;
+}
+
+.stat-value.approved {
+  color: #10b981;
+}
+
+.stat-value.not-approved {
+  color: #ef4444;
+}
+
+/* Evaluation Performance Section */
+.evaluation-performance {
+  background-color: #f8fafc;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.evaluation-performance h4 {
+  margin: 0 0 1rem 0;
+  color: #374151;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-bottom: 2px solid #667eea;
+  padding-bottom: 0.5rem;
+}
+
+.no-evaluations {
+  text-align: center;
+  padding: 2rem;
+  color: #6b7280;
+  font-style: italic;
+}
+
+.performance-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.5rem;
+  background-color: white;
+}
+
+.performance-table th,
+.performance-table td {
+  border: 1px solid #e5e7eb;
+  padding: 0.75rem;
+  text-align: center;
+}
+
+.performance-table th {
+  background-color: #667eea;
+  color: white;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.performance-table th:first-child {
+  text-align: left;
+}
+
+.performance-table td:first-child {
+  text-align: left;
+  font-weight: 600;
+  color: #374151;
+}
+
+.performance-table tbody tr:hover {
+  background-color: #f9fafb;
+}
+
+.performance-table .grade-ma {
+  background-color: #d1fae5;
+  color: #065f46;
+  font-weight: 600;
+}
+
+.performance-table .grade-mpa {
+  background-color: #fef3c7;
+  color: #92400e;
+  font-weight: 600;
+}
+
+.performance-table .grade-mana {
+  background-color: #fecaca;
+  color: #991b1b;
+  font-weight: 600;
+}
+
+/* Report Footer */
+.report-footer {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.report-timestamp {
+  text-align: center;
+  color: #6b7280;
+  font-size: 0.875rem;
+  font-style: italic;
+  margin: 0;
+}
+
+/* Student Results Section */
+.students-results {
+  background-color: #f8fafc;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.students-results h4 {
+  margin: 0 0 1rem 0;
+  color: #374151;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-bottom: 2px solid #667eea;
+  padding-bottom: 0.5rem;
+}
+
+.students-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.5rem;
+  background-color: white;
+}
+
+.students-table th,
+.students-table td {
+  border: 1px solid #e5e7eb;
+  padding: 0.75rem;
+  text-align: center;
+}
+
+.students-table th {
+  background-color: #667eea;
+  color: white;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.students-table th:first-child {
+  text-align: left;
+}
+
+.students-table td:first-child {
+  text-align: left;
+  font-weight: 600;
+  color: #374151;
+}
+
+.students-table tbody tr:hover {
+  background-color: #f9fafb;
+}
+
+/* Student Status Colors */
+.status-approved {
+  background-color: #d1fae5;
+  color: #065f46;
+  font-weight: 600;
+}
+
+.status-approved-final {
+  background-color: #dbeafe;
+  color: #1e40af;
+  font-weight: 600;
+}
+
+.status-failed {
+  background-color: #fecaca;
+  color: #991b1b;
+  font-weight: 600;
+}
+
+.status-failed-by-absence {
+  background-color: #fed7aa;
+  color: #9a3412;
+  font-weight: 600;
+}
+
+.status-pending {
+  background-color: #fef3c7;
+  color: #92400e;
+  font-weight: 600;
+}
+
+/* Report Actions */
+.report-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding: 1.5rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+/* Responsive Design for Report */
+@media (max-width: 768px) {
+  .report-stats-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .actions-grid {
+    grid-template-columns: 1fr;
+    max-width: none;
+  }
+  
+  .performance-table {
+    font-size: 0.8rem;
+  }
+  
+  .performance-table th,
+  .performance-table td {
+    padding: 0.5rem 0.25rem;
+  }
+
+  .students-table {
+    font-size: 0.8rem;
+  }
+  
+  .students-table th,
+  .students-table td {
+    padding: 0.5rem 0.25rem;
+  }
+  
+  .stat-value {
+    font-size: 1.25rem;
+  }
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.section-header h4 {
+  font-size: 1.1rem;
+  color: #333;
+  margin: 0;
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background-color: #f8f9fa;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #eee;
+}
+
+.filter-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.filter-control label {
+  font-size: 0.85rem;
+  color: #555;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.filter-select {
+  padding: 6px 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  background-color: white;
+  cursor: pointer;
+  outline: none;
+}
+
+.filter-select:focus {
+  border-color: #4a90e2;
+}
+
+.filter-input-x {
+  width: 70px;
+  padding: 6px 8px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.avg-indicator {
+  font-size: 0.8rem;
+  color: #666;
+  font-style: italic;
+  background-color: #e3f2fd;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+/* ========================================
+   Report Charts Styles
+   ======================================== */
+
+.report-charts-section {
+  margin: 1.5rem 0;
+}
+
+.charts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.chart-container {
+  background-color: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-container h4 {
+  margin: 0 0 0.5rem 0;
+  color: #374151;
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.chart-wrapper {
+  width: 100%;
+  flex: 1;
+  min-height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.chart-tooltip {
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 4px;
+  padding: 0.5rem 0.75rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.chart-tooltip p {
+  margin: 0.25rem 0;
+  font-size: 0.875rem;
+}
+
+.chart-no-data-text {
+  font-size: 14px;
+  font-style: italic;
+}
+
+/* Chart Legend */
+.chart-legend {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1.5rem;
+  margin-top: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.legend-line {
+  display: inline-block;
+  width: 24px;
+  height: 0;
+  border-top: 2px dashed;
+}
+
+.legend-text {
+  font-size: 0.75rem;
+  color: #666;
+}
+
+/* Responsive Charts */
+@media (max-width: 900px) {
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .chart-legend {
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.25rem;
+  }
+}
+
+/* ========================================
+   Bulk Import Section Styles
+   ======================================== */
+
 .bulk-import-section {
   background-color: #f8f9fa;
   border: 2px dashed #dee2e6;
@@ -1330,7 +1838,7 @@ tbody tr:last-child td {
   gap: 20px;
 }
 
-.stat-item {
+.import-result-stats .stat-item {
   display: flex;
   flex-direction: column;
   padding: 20px;
@@ -1339,14 +1847,14 @@ tbody tr:last-child td {
   flex: 1;
 }
 
-.stat-number {
+.import-result-stats .stat-number {
   font-size: 2.5rem;
   font-weight: bold;
   color: #667eea;
   margin-bottom: 5px;
 }
 
-.stat-label {
+.import-result-stats .stat-label {
   font-size: 0.9rem;
   color: #6c757d;
   text-transform: uppercase;
