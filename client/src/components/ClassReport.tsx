@@ -86,12 +86,13 @@ const ClassReport: React.FC<ClassReportProps> = ({ classObj, onClose, onError })
   };
 
 return (
-    <div className="enrollment-overlay">
-      <div className="report-modal">
+    <div className="enrollment-overlay" data-testid="report-overlay">
+      <div className="report-modal" data-testid="report-modal">
         <div className="enrollment-modal-header">
           <h3>Class Report: {classObj.topic} ({classObj.year}/{classObj.semester})</h3>
           <button 
             className="close-modal-btn"
+            data-testid="close-modal-btn"
             onClick={onClose}
             title="Close"
           >
@@ -107,7 +108,7 @@ return (
           ) : reportData ? (
             <>
               {/* Report Statistics - Two Columns */}
-              <div className="report-stats-grid">
+              <div className="report-stats-grid" data-testid="report-stats">
                 <div className="report-stat-card">
                   <h4>Enrollment Statistics</h4>
                   <div className="stat-item">
@@ -148,8 +149,8 @@ return (
               </div>
 
               {/* Charts Section*/}
-              <div className="report-charts-section">
-                <div className="charts-grid">
+              <div className="report-charts-section" data-testid="charts-section">
+                <div className="charts-grid" data-testid="charts-grid">
                   <StatusPieChart 
                     data={{
                       approvedCount: reportData.approvedCount,
@@ -166,13 +167,13 @@ return (
               </div>
 
               {/* Evaluation Performance Table */}
-              <div className="evaluation-performance">
+              <div className="evaluation-performance" data-testid="evaluation-performance">
                 <h4>Evaluation Performance</h4>
                 {reportData.evaluationPerformance.length === 0 ? (
-                  <p className="no-evaluations">No evaluations recorded yet</p>
+                  <p className="no-evaluations" data-testid="no-evaluations">No evaluations recorded yet</p>
                 ) : (
                   <div className="table-container">
-                    <table className="performance-table">
+                    <table className="performance-table" data-testid="performance-table">
                       <thead>
                         <tr>
                           <th>Goal</th>
@@ -201,7 +202,7 @@ return (
               </div>
 
               {/* Student Table */}
-              <div className="students-results">
+              <div className="students-results" data-testid="students-results">
                 <div className="section-header">
                   <h4>Detailed Student Results</h4>
                   
@@ -244,7 +245,7 @@ return (
                 </div>
 
                 <div className="table-container">
-                  <table className="students-table">
+                  <table className="students-table" data-testid="students-table">
                     <thead>
                       <tr>
                         <th>Student</th>
@@ -253,24 +254,27 @@ return (
                         <th>Status</th>
                       </tr>
                     </thead>
-                    <tbody>
+                    <tbody data-testid="students-table-body">
                       {filteredStudents.length > 0 ? (
                         filteredStudents.map((student) => (
-                          <tr key={student.studentId}>
-                            <td><strong>{student.name}</strong></td>
+                          <tr key={student.studentId} data-testid={`student-row-${student.studentId}`}>
+                            <td data-testid="student-name"><strong>{student.name}</strong></td>
                             
-                            <td style={{ color: '#666' }}>{student.studentId}</td>
-                            <td>
+                            <td style={{ color: '#666' }} data-testid="student-cpf">{student.studentId}</td>
+                            <td data-testid="student-grade">
                               {student.finalGrade !== null ? student.finalGrade.toFixed(2) : '–'}
                             </td>
-                            <td className={`status-${student.status.toLowerCase().replace(/_/g, '-')}`}>
+                            <td 
+                              className={`status-${student.status.toLowerCase().replace(/_/g, '-')}`}
+                              data-testid={`status-indicator-${student.status.toLowerCase().replace(/_/g, '-')}`}
+                            >
                               {typeof formatStatus === 'function' ? formatStatus(student.status) : student.status}
                             </td>
                           </tr>
                         ))
                       ) : (
-                        <tr className="empty-state-row">
-                          <td colSpan={4}>
+                        <tr className="empty-state-row" data-testid="empty-state-row">
+                          <td colSpan={4} data-testid="no-students-message">
                             {filterType === 'ALL' 
                               ? 'No students enrolled in this class.' 
                               : 'No students found matching this filter.'}
@@ -300,9 +304,10 @@ return (
           )}
         </div>
 
-        <div className="report-actions">
+        <div className="report-actions" data-testid="report-actions">
           <button 
             className="cancel-btn"
+            data-testid="close-report-btn"
             onClick={onClose}
           >
             Close

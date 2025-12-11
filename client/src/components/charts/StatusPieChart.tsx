@@ -48,9 +48,9 @@ const StatusPieChart: React.FC<StatusPieChartProps> = ({ data }) => {
   };
 
   return (
-    <div className="chart-container">
+    <div className="chart-container" data-testid="status-pie-chart">
       <h4>Student Status Distribution</h4>
-      <div className="chart-wrapper">
+      <div className="chart-wrapper" data-testid="pie-chart-wrapper">
         <ResponsiveContainer width="100%" height="100%">
           {hasData ? (
             <PieChart>

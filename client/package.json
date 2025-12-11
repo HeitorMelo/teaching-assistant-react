@@ -29,8 +29,8 @@
     "start": "cross-env PORT=3004 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "test:cucumber": "npx cucumber-js --config cucumber.js",
-    "test:cucumber:watch": "npx cucumber-js --config cucumber.js --watch",
+    "test:cucumber": "TS_NODE_PROJECT=tsconfig.test.json npx cucumber-js --config cucumber.js",
+    "test:cucumber:watch": "TS_NODE_PROJECT=tsconfig.test.json npx cucumber-js --config cucumber.js --watch",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
