@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Class, CreateClassRequest, getClassId } from '../types/Class';
 import { Student } from '../types/Student';
 import { ReportData } from '../types/Report';
-import ClassService, { fetchClassReportsForComparison } from '../services/ClassService';
+import ClassService from '../services/ClassService';
 import { studentService } from '../services/StudentService';
 import EnrollmentService from '../services/EnrollmentService';
-import { DEFAULT_ESPECIFICACAO_DO_CALCULO_DE_MEDIA, EspecificacaoDoCalculoDaMedia } from '../types/EspecificacaoDoCalculoDaMedia';
+import { DEFAULT_ESPECIFICACAO_DO_CALCULO_DE_MEDIA } from '../types/EspecificacaoDoCalculoDaMedia';
 import ClassReport from './ClassReport';
 import ClassComparison, { MAX_COMPARISON_SELECTION } from './ClassComparison';
 
@@ -31,41 +31,44 @@ const Classes: React.FC<ClassesProps> = ({
   onClassDeleted, 
   onError 
 }) => {
+  // ========== Form State ==========
   const [formData, setFormData] = useState<CreateClassRequest>(DEFAULT_FORM_DATA);
   const [editingClass, setEditingClass] = useState<Class | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   
-  // Student enrollment state
+  // ========== Enrollment State ==========
   const [allStudents, setAllStudents] = useState<Student[]>([]);
   const [enrollmentPanelClass, setEnrollmentPanelClass] = useState<Class | null>(null);
   const [selectedStudentsForEnrollment, setSelectedStudentsForEnrollment] = useState<Set<string>>(new Set());
   const [isEnrolling, setIsEnrolling] = useState(false);
 
-  // Report state - only track which class to show report for
+  // ========== Report State ==========
   const [reportPanelClass, setReportPanelClass] = useState<Class | null>(null);
-  const [reportData, setReportData] = useState<ReportData | null>(null);
-  const [isLoadingReport, setIsLoadingReport] = useState(false);
 
-  // Class comparison state
+  // ========== Comparison State ==========
   const [selectedClassesForComparison, setSelectedClassesForComparison] = useState<Set<string>>(new Set());
   const [comparisonReports, setComparisonReports] = useState<{ [classId: string]: ReportData }>({});
   const [isLoadingComparison, setIsLoadingComparison] = useState(false);
   const [comparisonError, setComparisonError] = useState<string | null>(null);
   const [comparisonViewType, setComparisonViewType] = useState<'table' | 'charts'>('charts');
 
-  // Helper to reset form data
-  const resetFormData = () => setFormData(DEFAULT_FORM_DATA);
+  // ========== Comparison Handlers (from ClassComparison) ==========
+  const [comparisonHandlers, setComparisonHandlers] = useState<{
+    handleClassSelectionToggle: (classId: string) => void;
+    handleCompareClasses: () => Promise<void>;
+    handleToggleSelectAllVisible: () => void;
+    headerAllSelected: boolean;
+    selectionInfoText: string;
+  } | null>(null);
 
-  // Helper to reset enrollment panel state
-  const resetEnrollmentPanel = () => {
+  // ========== Helper Functions ==========
+  const resetFormData = useCallback(() => setFormData(DEFAULT_FORM_DATA), []);
+  const resetEnrollmentPanel = useCallback(() => {
     setEnrollmentPanelClass(null);
     setSelectedStudentsForEnrollment(new Set());
-  };
+  }, []);
 
-  // Helper to clear comparison error
-  const clearComparisonError = () => setComparisonError(null);
-
-  // Load all students for enrollment dropdown
+  // ========== Effects ==========
   const loadAllStudents = useCallback(async () => {
     try {
       const students = await studentService.getAllStudents();
@@ -79,8 +82,15 @@ const Classes: React.FC<ClassesProps> = ({
     loadAllStudents();
   }, [loadAllStudents]);
 
-  // Handle enrollment form submission
-  const handleBulkEnrollStudents = async () => {
+  // ========== Form Handlers ==========
+
+  // ========== Enrollment Handlers ==========
+  const getAvailableStudentsForClass = useCallback((classObj: Class): Student[] => {
+    const enrolledStudentCPFs = new Set(classObj.enrollments.map(enrollment => enrollment.student.cpf));
+    return allStudents.filter(student => !enrolledStudentCPFs.has(student.cpf));
+  }, [allStudents]);
+
+  const handleBulkEnrollStudents = useCallback(async () => {
     if (!enrollmentPanelClass || selectedStudentsForEnrollment.size === 0) {
       onError('Please select students to enroll');
       return;
@@ -101,291 +111,75 @@ const Classes: React.FC<ClassesProps> = ({
       
       // Refresh class data
       onClassUpdated();
-      
-      onError(''); // Clear any previous errors
     } catch (error) {
       onError((error as Error).message);
     } finally {
       setIsEnrolling(false);
     }
-  };
+  }, [enrollmentPanelClass, selectedStudentsForEnrollment, onError, resetEnrollmentPanel, onClassUpdated]);
 
-  // Handle opening enrollment panel for a specific class
-  const handleOpenEnrollmentPanel = (classObj: Class) => {
+  const handleOpenEnrollmentPanel = useCallback((classObj: Class) => {
     setEnrollmentPanelClass(classObj);
     setSelectedStudentsForEnrollment(new Set());
-  };
+  }, []);
 
-  // Handle closing enrollment panel
-  const handleCloseEnrollmentPanel = () => {
+  const handleCloseEnrollmentPanel = useCallback(() => {
     resetEnrollmentPanel();
-  };
+  }, [resetEnrollmentPanel]);
 
-  // Handle student selection toggle
-  const handleStudentToggle = (studentCPF: string) => {
-    const newSelection = new Set(selectedStudentsForEnrollment);
+  const handleStudentToggle = useCallback((studentCPF: string) => {
+    setSelectedStudentsForEnrollment(prev => {
+      const newSelection = new Set(prev);
     if (newSelection.has(studentCPF)) {
       newSelection.delete(studentCPF);
     } else {
       newSelection.add(studentCPF);
     }
-    setSelectedStudentsForEnrollment(newSelection);
-  };
+      return newSelection;
+    });
+  }, []);
 
-  // Handle select all/none
-  const handleSelectAll = () => {
+  const handleSelectAll = useCallback(() => {
     if (!enrollmentPanelClass) return;
-    
     const availableStudents = getAvailableStudentsForClass(enrollmentPanelClass);
     setSelectedStudentsForEnrollment(new Set(availableStudents.map(s => s.cpf)));
-  };
+  }, [enrollmentPanelClass, getAvailableStudentsForClass]);
 
-  const handleSelectNone = () => {
+  const handleSelectNone = useCallback(() => {
     setSelectedStudentsForEnrollment(new Set());
-  };
+  }, []);
 
-  // Get students not enrolled in a specific class
-  const getAvailableStudentsForClass = (classObj: Class): Student[] => {
-    const enrolledStudentCPFs = new Set(classObj.enrollments.map(enrollment => enrollment.student.cpf));
-    return allStudents.filter(student => !enrolledStudentCPFs.has(student.cpf));
-  };
+  // Memoize available students for current enrollment panel class
+  const availableStudentsForEnrollment = useMemo(() => {
+    return enrollmentPanelClass ? getAvailableStudentsForClass(enrollmentPanelClass) : [];
+  }, [enrollmentPanelClass, getAvailableStudentsForClass]);
 
-  // Handle opening report panel for a specific class
-  const handleOpenReportPanel = async (classObj: Class) => {
+  // ========== Report Handlers ==========
+  const handleOpenReportPanel = useCallback((classObj: Class) => {
     setReportPanelClass(classObj);
-    setIsLoadingReport(true);
-    
-    try {
-      const report = await ClassService.getClassReport(classObj.id);
-      setReportData(report);
-    } catch (error) {
-      onError((error as Error).message);
-      setReportPanelClass(null);
-      clearComparisonError();
-    } finally {
-      setIsLoadingReport(false);
-    }
-  };
+  }, []);
 
-  // Handle class selection for comparison
-  const handleClassSelectionToggle = (classId: string) => {
-    const newSelection = new Set(selectedClassesForComparison);
-
-    if (newSelection.has(classId)) {
-      newSelection.delete(classId);
-      setSelectedClassesForComparison(newSelection);
-      clearComparisonError();
-      return;
-    }
-
-    // Trying to add
-    if (newSelection.size >= MAX_COMPARISON_SELECTION) {
-      setComparisonError(`You are not allowed to select more than ${MAX_COMPARISON_SELECTION} classes for comparison`);
-      return;
-    }
-
-    newSelection.add(classId);
-    setSelectedClassesForComparison(newSelection);
-    clearComparisonError(); // Clear error on new selection
-  };
-
-  
-
-  // Handle comparison button click
-  const handleCompareClasses = async () => {
-    const selectedIds = Array.from(selectedClassesForComparison);
-    setIsLoadingComparison(true);
-    clearComparisonError();
-    // Pre-check: ensure at least 2 selected
-    if (selectedIds.length < 2) {
-      setComparisonError('Please select at least 2 classes to compare');
-      setIsLoadingComparison(false);
-      return;
-    }
-
-    // Check for classes with no enrollments and inform user with names
-    const emptyClasses = selectedIds
-      .map(id => classes.find(c => c.id === id))
-      .filter(Boolean)
-      .filter(c => (c as Class).enrollments.length === 0) as Class[];
-
-    if (emptyClasses.length > 0) {
-      const names = emptyClasses.map(c => c.topic);
-      const first = names[0];
-      const others = names.length - 1;
-      const msg = others > 0
-        ? `The class "${first}" and ${others} other(s) have no enrolled students`
-        : `The class "${first}" has no enrolled students`;
-      setComparisonError(msg);
-      setIsLoadingComparison(false);
-      return;
-    }
-
-    const result = await fetchClassReportsForComparison(selectedIds);
-
-    if (result.error) {
-      setComparisonError(result.error);
-      setIsLoadingComparison(false);
-      return;
-    }
-
-    setComparisonReports(result.reports);
-    setIsLoadingComparison(false);
-    clearComparisonError();
-  };
-
-  // Handle closing comparison view
-  const handleCloseComparison = () => {
-    setComparisonReports({});
-    clearComparisonError();
-  };
-
-  // Additional comparison modal helpers
-  const [addClassToComparison, setAddClassToComparison] = useState<string>('');
-  const [pendingRemoveClassId, setPendingRemoveClassId] = useState<string | null>(null);
-  const [showRemovalDecision, setShowRemovalDecision] = useState(false);
-
-  const handleExportComparison = () => {
-    const data = Array.from(selectedClassesForComparison).map(id => {
-      const cls = classes.find(c => c.id === id);
-      return {
-        class: cls ? `${cls.topic} (${cls.year}/${cls.semester})` : id,
-        report: comparisonReports[id]
-      };
-    });
-
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `comparison-${new Date().toISOString()}.json`;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    URL.revokeObjectURL(url);
-  };
-
-  const handleAddClassToComparison = async (classIdParam?: string) => {
-    const classId = classIdParam ?? addClassToComparison;
-    if (!classId) return;
-    if (selectedClassesForComparison.size >= MAX_COMPARISON_SELECTION) {
-      setComparisonError(`You cannot add more than ${MAX_COMPARISON_SELECTION} classes to the comparison`);
-      return;
-    }
-
-    const newSelection = new Set(selectedClassesForComparison);
-    newSelection.add(classId);
-    setSelectedClassesForComparison(newSelection);
-
-    // Fetch report for newly added class
-    try {
-      const report = await ClassService.getClassReport(classId);
-      setComparisonReports(prev => ({ ...prev, [classId]: report }));
-      clearComparisonError();
-      // clear controlled select value
-      setAddClassToComparison('');
-    } catch (err) {
-      setComparisonError((err as Error).message || 'Failed to load report for the added class');
-    }
-  };
-
-  const handleRemoveFromComparisonPrompt = (classId: string) => {
-    // If removing would leave fewer than 2 classes, ask the user
-    if (selectedClassesForComparison.size <= 2) {
-      setPendingRemoveClassId(classId);
-      setShowRemovalDecision(true);
-      return;
-    }
-
-    // Otherwise remove immediately
-    const newSelection = new Set(selectedClassesForComparison);
-    newSelection.delete(classId);
-    setSelectedClassesForComparison(newSelection);
-    // also remove report
-    const newReports = { ...comparisonReports };
-    delete newReports[classId];
-    setComparisonReports(newReports);
-  };
-
-  const handleConfirmClearDisplay = () => {
-    setSelectedClassesForComparison(new Set());
-    setComparisonReports({});
-    setPendingRemoveClassId(null);
-    setShowRemovalDecision(false);
-    clearComparisonError();
-  };
-
-  const handleCancelRemovalDecision = () => {
-    setPendingRemoveClassId(null);
-    setShowRemovalDecision(false);
-  };
-
-  // Safe list of selected classes that have loaded reports
-  const selectedClassesWithReports: Class[] = Array.from(selectedClassesForComparison)
-    .map(id => classes.find(c => c.id === id))
-    .filter((c): c is Class => {
-      if (!c) return false;
-      return Boolean(comparisonReports[c.id]);
-    });
-
-  // Toggle select first up-to-MAX_COMPARISON_SELECTION prioritized by availability of reports
-  const handleToggleSelectAllVisible = () => {
-    const MAX = MAX_COMPARISON_SELECTION;
-    const withReports = classes.filter(c => Boolean(comparisonReports[c.id]));
-    const withoutReports = classes.filter(c => !comparisonReports[c.id]);
-    const prioritized = [...withReports, ...withoutReports];
-    const toSelect = prioritized.slice(0, Math.min(MAX, prioritized.length));
-
-    const allSelected = toSelect.every(c => selectedClassesForComparison.has(c.id));
-    if (allSelected) {
-      setSelectedClassesForComparison(new Set());
-      clearComparisonError();
-      return;
-    }
-
-    const newSelection = new Set<string>(toSelect.map(c => c.id));
-    setSelectedClassesForComparison(newSelection);
-    clearComparisonError();
-  };
-
-  const headerAllSelected = (() => {
-    if (!classes || classes.length === 0) return false;
-    const MAX = MAX_COMPARISON_SELECTION;
-    const withReports = classes.filter(c => Boolean(comparisonReports[c.id]));
-    const withoutReports = classes.filter(c => !comparisonReports[c.id]);
-    const prioritized = [...withReports, ...withoutReports];
-    const toCheck = prioritized.slice(0, Math.min(MAX, prioritized.length));
-    return toCheck.length > 0 && toCheck.every(c => selectedClassesForComparison.has(c.id));
-  })();
-
-  // Selection info text for display (handles special message when many classes exist)
-  const selectionInfoText = (() => {
-    if (selectedClassesForComparison.size === 0) return 'Select at least 2 classes to compare';
-    // Show clearer message when the user has reached the maximum allowed selection
-    if (selectedClassesForComparison.size >= MAX_COMPARISON_SELECTION) {
-      return `Maximum of ${MAX_COMPARISON_SELECTION} classes selected`;
-    }
-    return `${selectedClassesForComparison.size} class${selectedClassesForComparison.size !== 1 ? 'es' : ''} selected`;
-  })();
-
-  // Handle closing report panel
-  const handleCloseReportPanel = () => {
+  const handleCloseReportPanel = useCallback(() => {
     setReportPanelClass(null);
-    setReportData(null);
-    clearComparisonError();
-  };
+  }, []);
 
-  // Handle form input changes
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  // ========== Comparison Handlers ==========
+  // Handlers are provided by ClassComparison component via onHandlersReady callback
+
+  const yearOptions = useMemo(() => {
+    const currentYear = new Date().getFullYear();
+    return Array.from({ length: 10 }, (_, i) => currentYear - 5 + i);
+  }, []);
+
+  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: name === 'semester' || name === 'year' ? parseInt(value) : value
+      [name]: name === 'semester' || name === 'year' ? parseInt(value, 10) : value
     }));
-  };
+  }, []);
 
-  // Handle form submission
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!formData.topic.trim()) {
@@ -414,22 +208,19 @@ const Classes: React.FC<ClassesProps> = ({
     } finally {
       setIsSubmitting(false);
     }
-  };
+  }, [formData, editingClass, onClassAdded, onClassUpdated, onError, resetFormData]);
 
-  // Handle edit button click
-  const handleEdit = (classObj: Class) => {
+  const handleEdit = useCallback((classObj: Class) => {
     setEditingClass(classObj);
     setFormData(classObj);
-  };
+  }, []);
 
-  // Handle cancel edit
-  const handleCancelEdit = () => {
+  const handleCancelEdit = useCallback(() => {
     setEditingClass(null);
     resetFormData();
-  };
+  }, [resetFormData]);
 
-  // Handle delete
-  const handleDelete = async (classObj: Class) => {
+  const handleDelete = useCallback(async (classObj: Class) => {
     if (window.confirm(`Are you sure you want to delete the class "${classObj.topic} (${classObj.year}/${classObj.semester})"?`)) {
       try {
         await ClassService.deleteClass(classObj.id);
@@ -438,11 +229,8 @@ const Classes: React.FC<ClassesProps> = ({
         onError((error as Error).message);
       }
     }
-  };
+  }, [onClassDeleted, onError]);
 
-  // Generate current year options
-  const currentYear = new Date().getFullYear();
-  const yearOptions = Array.from({ length: 10 }, (_, i) => currentYear - 5 + i);
 
   return (
     <div className="classes-container">
@@ -528,8 +316,8 @@ const Classes: React.FC<ClassesProps> = ({
                     <input 
                       type="checkbox" 
                       title="Select visible classes for comparison"
-                      checked={headerAllSelected}
-                      onChange={handleToggleSelectAllVisible}
+                      checked={comparisonHandlers?.headerAllSelected ?? false}
+                      onChange={() => comparisonHandlers?.handleToggleSelectAllVisible()}
                     />
                   </th>
                   <th>Topic</th>
@@ -546,7 +334,7 @@ const Classes: React.FC<ClassesProps> = ({
                       <input 
                         type="checkbox"
                         checked={selectedClassesForComparison.has(classObj.id)}
-                        onChange={() => handleClassSelectionToggle(classObj.id)}
+                        onChange={() => comparisonHandlers?.handleClassSelectionToggle(classObj.id)}
                         title="Select for comparison"
                       />
                     </td>
@@ -594,11 +382,11 @@ const Classes: React.FC<ClassesProps> = ({
             {/* Comparison Controls */}
             {classes.length > 1 && (
               <div className="comparison-controls">
-                <p className="selection-info">{selectionInfoText}</p>
+                <p className="selection-info">{comparisonHandlers?.selectionInfoText ?? 'Select at least 2 classes to compare'}</p>
                 <div style={{ display: 'flex', gap: 8 }}>
                   <button
                     className="compare-btn"
-                    onClick={handleCompareClasses}
+                    onClick={() => comparisonHandlers?.handleCompareClasses()}
                     disabled={selectedClassesForComparison.size < 2 || isLoadingComparison}
                   >
                     {isLoadingComparison ? 'Loading...' : `Compare (${selectedClassesForComparison.size})`}
@@ -645,13 +433,13 @@ const Classes: React.FC<ClassesProps> = ({
               {/* Available Students to Enroll */}
               <div className="available-students">
                 <div className="available-students-header">
-                  <h4>Available Students ({getAvailableStudentsForClass(enrollmentPanelClass).length}):</h4>
+                  <h4>Available Students ({availableStudentsForEnrollment.length}):</h4>
                   <div className="selection-controls">
                     <button 
                       type="button"
                       className="select-all-btn"
                       onClick={handleSelectAll}
-                      disabled={getAvailableStudentsForClass(enrollmentPanelClass).length === 0}
+                      disabled={availableStudentsForEnrollment.length === 0}
                     >
                       Select All
                     </button>
@@ -665,11 +453,11 @@ const Classes: React.FC<ClassesProps> = ({
                   </div>
                 </div>
 
-                {getAvailableStudentsForClass(enrollmentPanelClass).length === 0 ? (
+                {availableStudentsForEnrollment.length === 0 ? (
                   <p className="no-available-students">All registered students are already enrolled in this class</p>
                 ) : (
                   <div className="students-grid">
-                    {getAvailableStudentsForClass(enrollmentPanelClass).map(student => (
+                    {availableStudentsForEnrollment.map(student => (
                       <div 
                         key={student.cpf} 
                         className={`student-card ${selectedStudentsForEnrollment.has(student.cpf) ? 'selected' : ''}`}
@@ -686,8 +474,8 @@ const Classes: React.FC<ClassesProps> = ({
                           <div className="student-cpf">{student.cpf}</div>
                           <div className="student-email">{student.email}</div>
                         </div>
-                      </div>
-                    ))}
+                            </div>
+                          ))}
                   </div>
                 )}
               </div>
@@ -725,26 +513,22 @@ const Classes: React.FC<ClassesProps> = ({
         />
       )}
 
-      { /* Class Comparison */ }
-      {Object.keys(comparisonReports).length > 0 && (
+      { /* Class Comparison - Always render to expose handlers, conditionally show modal */ }
         <ClassComparison
           classes={classes}
           selectedClassesForComparison={selectedClassesForComparison}
+        setSelectedClassesForComparison={setSelectedClassesForComparison}
           comparisonReports={comparisonReports}
+        setComparisonReports={setComparisonReports}
           comparisonError={comparisonError}
+        setComparisonError={setComparisonError}
           comparisonViewType={comparisonViewType}
           setComparisonViewType={setComparisonViewType}
-          addClassToComparison={addClassToComparison}
-          setAddClassToComparison={setAddClassToComparison}
-          handleAddClassToComparison={handleAddClassToComparison}
-          handleRemoveFromComparisonPrompt={handleRemoveFromComparisonPrompt}
-          handleExportComparison={handleExportComparison}
-          handleCloseComparison={handleCloseComparison}
-          showRemovalDecision={showRemovalDecision}
-          handleConfirmClearDisplay={handleConfirmClearDisplay}
-          handleCancelRemovalDecision={handleCancelRemovalDecision}
-        />
-      )}
+        isLoadingComparison={isLoadingComparison}
+        setIsLoadingComparison={setIsLoadingComparison}
+        onHandlersReady={setComparisonHandlers}
+        showModal={Object.keys(comparisonReports).length > 0}
+      />
     </div>
   );
 };
