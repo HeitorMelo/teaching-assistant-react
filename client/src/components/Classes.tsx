@@ -503,8 +503,8 @@ const Classes: React.FC<ClassesProps> = ({
                   </th>
                   <th>Topic</th>
                   <th>Year</th>
-                  <th>Semester</th>
                   <th>Enrolled Students</th>
+                  <th>Semester</th>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -521,8 +521,8 @@ const Classes: React.FC<ClassesProps> = ({
                     </td>
                     <td><strong>{classObj.topic}</strong></td>
                     <td><strong>{classObj.year}</strong></td>
-                    <td><strong>{classObj.semester === 1 ? '1st Semester' : '2nd Semester'}</strong></td>
                     <td data-testid="enrolled-count">{classObj.enrollments.length}</td>
+                    <td><strong>{classObj.semester === 1 ? '1st Semester' : '2nd Semester'}</strong></td>
                     <td>
                       <div className="actions-grid">
                         <button
